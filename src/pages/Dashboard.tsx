@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Link,
   Routes,
@@ -25,9 +26,66 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import AnalyticsView from "./views/AnalyticsView";
 import CandidatesView from "./views/CandidatesView";
+import {
+  initialVacancies,
+  initialCandidates,
+  Vacancy,
+  Candidate,
+} from "../data/mock";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
-function VacanciesView() {
+function VacanciesView({
+  vacancies,
+  onCreate,
+}: {
+  vacancies: Vacancy[];
+  onCreate: (v: Partial<Vacancy>) => void;
+}) {
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+
+  // Form State
+  const [newTitle, setNewTitle] = useState("");
+  const [newDesc, setNewDesc] = useState("");
+  const [duties, setDuties] = useState("");
+  const [mustHaves, setMustHaves] = useState("");
+  const [niceToHaves, setNiceToHaves] = useState("");
+  const [stopFactors, setStopFactors] = useState("");
+  const [conditions, setConditions] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newTitle.trim()) return;
+
+    onCreate({
+      title: newTitle,
+      description: newDesc,
+      responsibilities: duties,
+      mustHaves: mustHaves,
+      niceToHaves: niceToHaves,
+      stopFactors: stopFactors,
+      conditions: conditions,
+    });
+
+    setNewTitle("");
+    setNewDesc("");
+    setDuties("");
+    setMustHaves("");
+    setNiceToHaves("");
+    setStopFactors("");
+    setConditions("");
+    setOpen(false);
+  };
 
   return (
     <motion.div
@@ -39,45 +97,231 @@ function VacanciesView() {
     >
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-serif text-foreground">Вакансии</h2>
+          <h2 className="text-2xl font-semibold text-foreground">Вакансии</h2>
           <p className="text-sm text-muted-foreground mt-1">
             Управление активными позициями и требованиями.
           </p>
         </div>
-        <button className="bg-foreground text-background hover:bg-foreground/90 px-4 py-2 rounded-md text-sm font-medium transition-colors">
-          Создать вакансию
-        </button>
+
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <button className="bg-foreground text-background hover:bg-foreground/90 px-4 py-2 rounded-md text-sm font-medium transition-colors">
+              Создать вакансию
+            </button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[700px] max-h-[85vh] overflow-y-auto bg-background border-border rounded-xl p-0">
+            <div className="px-6 py-4 border-b border-border sticky top-0 bg-background z-10">
+              <DialogTitle className="text-foreground text-xl">
+                Набор критериев для скрининга
+              </DialogTitle>
+              <p className="text-xs text-muted-foreground mt-1">
+                Для AI вакансия — это не текст, а параметры фильтрации.
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="flex flex-col gap-6 p-6">
+              <div className="grid grid-cols-2 gap-6">
+                <div className="flex flex-col gap-2">
+                  <Label
+                    htmlFor="title"
+                    className="text-foreground font-semibold"
+                  >
+                    Название вакансии
+                  </Label>
+                  <Input
+                    id="title"
+                    placeholder="Например: Frontend Разработчик"
+                    value={newTitle}
+                    onChange={(e) => setNewTitle(e.target.value)}
+                    autoFocus
+                    required
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <Label
+                    htmlFor="desc"
+                    className="text-foreground font-semibold"
+                  >
+                    Краткое описание роли
+                  </Label>
+                  <Input
+                    id="desc"
+                    placeholder="В чем суть позиции..."
+                    value={newDesc}
+                    onChange={(e) => setNewDesc(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <Label
+                  htmlFor="duties"
+                  className="text-foreground font-semibold"
+                >
+                  Обязанности
+                </Label>
+                <p className="text-xs text-muted-foreground">
+                  Что кандидат будет делать (по пунктам).
+                </p>
+                <Textarea
+                  id="duties"
+                  placeholder="- Разрабатывать UI компоненты&#10;- Работать с API..."
+                  value={duties}
+                  onChange={(e) => setDuties(e.target.value)}
+                  className="min-h-[80px]"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-6">
+                <div className="flex flex-col gap-2">
+                  <Label
+                    htmlFor="musthaves"
+                    className="text-foreground font-semibold"
+                  >
+                    Обязательные требования
+                  </Label>
+                  <p className="text-xs text-muted-foreground">
+                    Must-have. Если нет — AI отклонит.
+                  </p>
+                  <Textarea
+                    id="musthaves"
+                    placeholder="- Опыт React от 3 лет&#10;- Знание TypeScript..."
+                    value={mustHaves}
+                    onChange={(e) => setMustHaves(e.target.value)}
+                  />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <Label
+                    htmlFor="nicetohaves"
+                    className="text-foreground font-semibold"
+                  >
+                    Желательные требования
+                  </Label>
+                  <p className="text-xs text-muted-foreground">
+                    Повышает score, но не блокирует.
+                  </p>
+                  <Textarea
+                    id="nicetohaves"
+                    placeholder="- Опыт с WebGL&#10;- Навыки дизайна..."
+                    value={niceToHaves}
+                    onChange={(e) => setNiceToHaves(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-6">
+                <div className="flex flex-col gap-2">
+                  <Label
+                    htmlFor="stopfactors"
+                    className="text-foreground font-semibold text-red-500"
+                  >
+                    Стоп-факторы
+                  </Label>
+                  <p className="text-xs text-muted-foreground">
+                    То, что почти точно не подходит.
+                  </p>
+                  <Textarea
+                    id="stopfactors"
+                    placeholder="- Частая смена работы (прыгун)&#10;- Нет опыта в команде..."
+                    value={stopFactors}
+                    onChange={(e) => setStopFactors(e.target.value)}
+                    className="focus-visible:ring-red-500"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <Label
+                    htmlFor="conditions"
+                    className="text-foreground font-semibold"
+                  >
+                    Условия
+                  </Label>
+                  <p className="text-xs text-muted-foreground">
+                    График, локация, зарплата, гибрид.
+                  </p>
+                  <Textarea
+                    id="conditions"
+                    placeholder="- Удаленка / Офис Мск&#10;- Гибкое начало дня..."
+                    value={conditions}
+                    onChange={(e) => setConditions(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-2 pt-4 border-t border-border">
+                <Label className="text-foreground font-semibold">
+                  Веса критериев (AI Scoring)
+                </Label>
+                <p className="text-xs text-muted-foreground mb-2">
+                  HR задает, что важнее именно для этой вакансии.
+                </p>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {["Опыт", "Навыки", "График", "Мотивация"].map(
+                    (criterion) => (
+                      <div
+                    key={criterion}
+                    className="flex flex-col gap-1.5"
+                  >
+                        <span className="text-xs text-foreground">
+                          {criterion}
+                        </span>
+                        <select className="bg-surface border border-border text-xs rounded-md px-2 py-1 outline-none focus:border-foreground">
+                          <option value="high">Высокий</option>
+                          <option value="medium">Средний</option>
+                          <option value="low">Низкий</option>
+                        </select>
+                      </div>
+                    ),
+                  )}
+                </div>
+              </div>
+
+              <DialogFooter className="mt-4 pt-4 border-t border-border sticky bottom-0 bg-background">
+                <DialogClose asChild>
+                  <button
+                    type="button"
+                    className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground"
+                  >
+                    Отмена
+                  </button>
+                </DialogClose>
+                <button
+                  type="submit"
+                  className="px-4 py-2 text-sm font-medium bg-foreground text-background rounded-md hover:bg-foreground/90 transition-colors"
+                >
+                  Создать вакансию
+                </button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {[
-          { id: 1, title: "Senior React Developer", cands: 12 },
-          { id: 2, title: "Backend Engineer (Go)", cands: 8 },
-          { id: 3, title: "Product Designer", cands: 24 },
-        ].map((vac) => (
+        {vacancies.map((vac) => (
           <div
             key={vac.id}
             onClick={() => navigate(`/dashboard/vacancies/${vac.id}`)}
-            className="p-5 border border-border bg-surface/50 rounded-xl hover:bg-surface transition-colors cursor-pointer group"
+            className="p-5 border border-border bg-surface/50 rounded-lg hover:bg-surface transition-colors cursor-pointer group"
           >
             <div className="flex justify-between items-start mb-4">
-              <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center text-accent">
+              <div className="w-10 h-10 rounded-md border border-border bg-surface flex items-center justify-center text-muted-foreground">
                 <Briefcase size={18} />
               </div>
-              <span className="text-xs font-medium px-2 py-1 bg-green-500/10 text-green-500 rounded-full">
-                Активна
+              <span className="text-[10px] font-medium uppercase tracking-wider px-2 py-1 border border-border bg-surface text-foreground rounded-md shadow-sm">
+                {vac.status === "Active" ? "Active" : "Closed"}
               </span>
             </div>
-            <h3 className="font-medium text-foreground group-hover:text-accent transition-colors">
+            <h3 className="font-semibold text-lg text-foreground transition-colors">
               {vac.title}
             </h3>
             <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
-              Требуется глубокое понимание стека и архитектуры высоконагруженных
-              приложений.
+              {vac.description}
             </p>
             <div className="mt-4 pt-4 border-t border-border flex justify-between items-center text-sm text-muted-foreground">
-              <span>{vac.cands} кандидатов</span>
-              <span>Обновлено вчера</span>
+              <span>{vac.id}</span>
+              <span>Updated {vac.updatedAt}</span>
             </div>
           </div>
         ))}
@@ -86,7 +330,13 @@ function VacanciesView() {
   );
 }
 
-function CandidatesWrapper() {
+function CandidatesWrapper({
+  candidates,
+  vacancies,
+}: {
+  candidates: Candidate[];
+  vacancies: Vacancy[];
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -94,23 +344,23 @@ function CandidatesWrapper() {
       exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.3 }}
     >
-      <CandidatesView />
+      <CandidatesView candidates={candidates} vacancies={vacancies} />
     </motion.div>
   );
 }
 
-function VacancyCandidatesWrapper() {
+function VacancyCandidatesWrapper({
+  candidates,
+  vacancies,
+}: {
+  candidates: Candidate[];
+  vacancies: Vacancy[];
+}) {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // Mock finding vacancy title by id
-  const titles: Record<string, string> = {
-    "1": "Senior React Developer",
-    "2": "Backend Engineer (Go)",
-    "3": "Product Designer",
-  };
-
-  const title = id ? titles[id] || "Vacancy" : "Vacancy";
+  const vacancy = vacancies.find((v) => v.id === id);
+  const title = vacancy ? vacancy.title : "Vacancy";
 
   return (
     <motion.div
@@ -127,7 +377,12 @@ function VacancyCandidatesWrapper() {
         <ArrowLeft size={16} />
         Back to Vacancies
       </button>
-      <CandidatesView title={title} />
+      <CandidatesView
+        title={title}
+        candidates={candidates}
+        vacancies={vacancies}
+        selectedVacancyId={id}
+      />
     </motion.div>
   );
 }
@@ -149,6 +404,24 @@ export default function Dashboard() {
   const { isDark, toggleTheme } = useTheme();
   const location = useLocation();
 
+  const [vacancies, setVacancies] = useState<Vacancy[]>(initialVacancies);
+  const [candidates, setCandidates] = useState<Candidate[]>(initialCandidates);
+
+  const handleCreateVacancy = (data: Partial<Vacancy>) => {
+    const id = Date.now().toString();
+    setVacancies([
+      ...vacancies,
+      {
+        id,
+        title: data.title || "New Custom Vacancy",
+        description:
+          data.description || "Auto-generated vacancy description for MVP.",
+        status: "Active",
+        updatedAt: "Just now",
+      },
+    ]);
+  };
+
   const navItems = [
     { name: "Вакансии", path: "/dashboard", icon: Briefcase },
     { name: "Candidates", path: "/dashboard/resumes", icon: Users },
@@ -160,12 +433,10 @@ export default function Dashboard() {
       {/* Sidebar */}
       <aside className="w-full md:w-64 border-r border-border bg-surface/50 flex flex-col flex-shrink-0">
         <div className="p-6 flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-accent/20 flex items-center justify-center text-accent">
-            <div className="w-3 h-3 rounded-full bg-accent" />
+          <div className="w-8 h-8 rounded-md bg-foreground flex items-center justify-center text-background">
+            <div className="w-3 h-3 rounded-sm bg-background" />
           </div>
-          <span className="font-serif text-xl font-medium tracking-tight">
-            Screenr
-          </span>
+          <span className="font-semibold text-xl tracking-tight">Screenr</span>
         </div>
 
         <nav className="flex-1 px-4 flex flex-col gap-1 overflow-y-auto">
@@ -181,13 +452,15 @@ export default function Dashboard() {
                 className={cn(
                   "flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-all",
                   isActive
-                    ? "bg-accent/10 text-accent"
+                    ? "bg-muted text-foreground"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
                 )}
               >
                 <item.icon
                   size={18}
-                  className={isActive ? "text-accent" : "text-muted-foreground"}
+                  className={
+                    isActive ? "text-foreground" : "text-muted-foreground"
+                  }
                 />
                 {item.name}
               </Link>
@@ -221,17 +494,17 @@ export default function Dashboard() {
           <div className="flex items-center gap-4 ml-auto">
             <button
               onClick={toggleTheme}
-              className="w-9 h-9 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="w-9 h-9 flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
             >
               {isDark ? <Sun size={18} /> : <Moon size={18} />}
             </button>
-            <button className="w-9 h-9 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors">
+            <button className="w-9 h-9 flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">
               <Bell size={18} />
             </button>
             <div className="h-5 w-px bg-border mx-1" />
-            <Avatar className="h-8 w-8 cursor-pointer border border-border">
+            <Avatar className="h-8 w-8 rounded-md cursor-pointer border border-border">
               <AvatarImage src="" />
-              <AvatarFallback className="bg-accent/20 text-accent text-xs">
+              <AvatarFallback className="bg-muted text-foreground rounded-md text-xs">
                 HR
               </AvatarFallback>
             </Avatar>
@@ -243,12 +516,33 @@ export default function Dashboard() {
           <div className="max-w-6xl mx-auto">
             <AnimatePresence mode="wait">
               <Routes location={location} key={location.pathname}>
-                <Route path="/" element={<VacanciesView />} />
+                <Route
+                  path="/"
+                  element={
+                    <VacanciesView
+                      vacancies={vacancies}
+                      onCreate={handleCreateVacancy}
+                    />
+                  }
+                />
                 <Route
                   path="/vacancies/:id"
-                  element={<VacancyCandidatesWrapper />}
+                  element={
+                    <VacancyCandidatesWrapper
+                      candidates={candidates}
+                      vacancies={vacancies}
+                    />
+                  }
                 />
-                <Route path="/resumes" element={<CandidatesWrapper />} />
+                <Route
+                  path="/resumes"
+                  element={
+                    <CandidatesWrapper
+                      candidates={candidates}
+                      vacancies={vacancies}
+                    />
+                  }
+                />
                 <Route path="/analytics" element={<AnalyticsWrapper />} />
               </Routes>
             </AnimatePresence>

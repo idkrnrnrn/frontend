@@ -1,6 +1,6 @@
+import { useState, useMemo } from "react";
 import {
   Search,
-  Filter,
   ChevronDown,
   Bookmark,
   MoreHorizontal,
@@ -13,138 +13,163 @@ import {
   Award,
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Candidate, Vacancy, Stage } from "../../data/mock";
 
-const stats = [
-  {
-    label: "Total candidates",
-    value: "127",
-    icon: UserPlus,
-    trend: "up",
-    percent: "12%",
-    color: "text-muted-foreground",
-  },
-  {
-    label: "Strong matches",
-    value: "12",
-    icon: Sparkles,
-    trend: "up",
-    percent: "8%",
-    color: "text-accent",
-  },
-  {
-    label: "To review",
-    value: "23",
-    icon: Clock,
-    trend: "down",
-    percent: "4%",
-    color: "text-muted-foreground",
-  },
-  {
-    label: "Interviews",
-    value: "4",
-    icon: Calendar,
-    trend: "up",
-    percent: "2",
-    color: "text-muted-foreground",
-  },
-  {
-    label: "Offers",
-    value: "3",
-    icon: Award,
-    trend: "up",
-    percent: "1",
-    color: "text-muted-foreground",
-  },
-];
+export default function CandidatesView({
+  title,
+  candidates,
+  vacancies = [],
+  selectedVacancyId,
+}: {
+  title?: string;
+  candidates: Candidate[];
+  vacancies?: Vacancy[];
+  selectedVacancyId?: string;
+}) {
+  const [activeTab, setActiveTab] = useState<
+    Stage | "All candidates" | "Strong matches"
+  >("All candidates");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterJob, setFilterJob] = useState<string>(
+    selectedVacancyId || "All jobs",
+  );
 
-const candidates = [
-  {
-    initials: "AP",
-    name: "Anna Petrova",
-    isStrongMatch: true,
-    title: "Senior Platform Engineer at Stripe",
-    match: 92,
-    role: "Senior Platform Engineer",
-    exp: "6 yrs",
-    company: "Stripe",
-    added: "2m ago",
-  },
-  {
-    initials: "DK",
-    name: "Dmitry Kuznetsov",
-    isStrongMatch: false,
-    title: "Backend Engineer at Revolut",
-    match: 88,
-    role: "Backend Engineer",
-    exp: "5 yrs",
-    company: "Revolut",
-    added: "1h ago",
-  },
-  {
-    initials: "MC",
-    name: "Maria Collins",
-    isStrongMatch: false,
-    title: "Staff Software Engineer at Shopify",
-    match: 85,
-    role: "Staff Software Engineer",
-    exp: "7 yrs",
-    company: "Shopify",
-    added: "2h ago",
-  },
-  {
-    initials: "IL",
-    name: "Ivan Lebedev",
-    isStrongMatch: false,
-    title: "Tech Lead at Tinkoff",
-    match: 82,
-    role: "Tech Lead",
-    exp: "6 yrs",
-    company: "Tinkoff",
-    added: "4h ago",
-  },
-  {
-    initials: "EW",
-    name: "Ethan Wong",
-    isStrongMatch: false,
-    title: "Senior Backend Engineer at Plaid",
-    match: 81,
-    role: "Senior Backend Engineer",
-    exp: "5 yrs",
-    company: "Plaid",
-    added: "5h ago",
-  },
-  {
-    initials: "RS",
-    name: "Rohan Singh",
-    isStrongMatch: false,
-    title: "Software Engineer at AWS",
-    match: 78,
-    role: "Software Engineer",
-    exp: "4 yrs",
-    company: "AWS",
-    added: "6h ago",
-  },
-  {
-    initials: "NB",
-    name: "Nina Brown",
-    isStrongMatch: false,
-    title: "Platform Engineer at Databricks",
-    match: 75,
-    role: "Platform Engineer",
-    exp: "4 yrs",
-    company: "Databricks",
-    added: "7h ago",
-  },
-];
+  // Minimal filter state
+  const [minMatch, setMinMatch] = useState<number>(0);
 
-export default function CandidatesView({ title }: { title?: string }) {
+  const filteredCandidates = useMemo(() => {
+    return candidates.filter((c) => {
+      // Job filter
+      if (filterJob !== "All jobs" && c.vacancyId !== filterJob) return false;
+
+      // Tab filter
+      if (activeTab === "Strong matches" && c.matchScore < 90) return false;
+      if (
+        activeTab !== "All candidates" &&
+        activeTab !== "Strong matches" &&
+        c.stage !== activeTab
+      )
+        return false;
+
+      // Match Score filter
+      if (c.matchScore < minMatch) return false;
+
+      // Search filter
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        if (
+          !c.name.toLowerCase().includes(q) &&
+          !c.role.toLowerCase().includes(q) &&
+          !c.company.toLowerCase().includes(q)
+        ) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+  }, [candidates, filterJob, activeTab, minMatch, searchQuery]);
+
+  const tabs = [
+    {
+      name: "Strong matches",
+      count: candidates.filter(
+        (c) =>
+          c.matchScore >= 90 &&
+          (filterJob === "All jobs" || c.vacancyId === filterJob),
+      ).length,
+    },
+    {
+      name: "All candidates",
+      count: candidates.filter(
+        (c) => filterJob === "All jobs" || c.vacancyId === filterJob,
+      ).length,
+    },
+    {
+      name: "New",
+      count: candidates.filter(
+        (c) =>
+          c.stage === "New" &&
+          (filterJob === "All jobs" || c.vacancyId === filterJob),
+      ).length,
+    },
+    {
+      name: "Screened",
+      count: candidates.filter(
+        (c) =>
+          c.stage === "Screened" &&
+          (filterJob === "All jobs" || c.vacancyId === filterJob),
+      ).length,
+    },
+    {
+      name: "Interview",
+      count: candidates.filter(
+        (c) =>
+          c.stage === "Interview" &&
+          (filterJob === "All jobs" || c.vacancyId === filterJob),
+      ).length,
+    },
+    {
+      name: "Offer",
+      count: candidates.filter(
+        (c) =>
+          c.stage === "Offer" &&
+          (filterJob === "All jobs" || c.vacancyId === filterJob),
+      ).length,
+    },
+  ];
+
+  const stats = [
+    {
+      label: "Total candidates",
+      value: candidates.length,
+      icon: UserPlus,
+      trend: "up",
+      percent: "12%",
+      color: "text-muted-foreground",
+    },
+    {
+      label: "Strong matches",
+      value: candidates.filter((c) => c.matchScore >= 90).length,
+      icon: Sparkles,
+      trend: "up",
+      percent: "8%",
+      color: "text-foreground",
+    },
+    {
+      label: "To review",
+      value: candidates.filter((c) => c.stage === "New").length,
+      icon: Clock,
+      trend: "down",
+      percent: "4%",
+      color: "text-muted-foreground",
+    },
+    {
+      label: "Interviews",
+      value: candidates.filter((c) => c.stage === "Interview").length,
+      icon: Calendar,
+      trend: "up",
+      percent: "2",
+      color: "text-muted-foreground",
+    },
+    {
+      label: "Offers",
+      value: candidates.filter((c) => c.stage === "Offer").length,
+      icon: Award,
+      trend: "up",
+      percent: "1",
+      color: "text-muted-foreground",
+    },
+  ];
+
   return (
     <div className="flex flex-col gap-6 w-full text-foreground max-w-[1400px] mx-auto pb-10">
       <div className="flex flex-col mb-2">
-        <h1 className="text-3xl font-serif">
+        <h1 className="text-2xl font-semibold">
           {title ? (
             <>
-              Candidates for <span className="text-accent italic">{title}</span>
+              Candidates for{" "}
+              <span className="text-muted-foreground">{title}</span>
             </>
           ) : (
             "Candidates"
@@ -157,30 +182,32 @@ export default function CandidatesView({ title }: { title?: string }) {
         {stats.map((stat, i) => (
           <div
             key={i}
-            className="bg-surface border border-border rounded-xl p-5 shadow-sm flex flex-col gap-4"
+            className="bg-surface border border-border rounded-lg p-5 shadow-sm flex flex-col gap-4"
           >
             <div className="flex items-center gap-3">
               <div
-                className={`w-8 h-8 rounded-full bg-border/50 flex items-center justify-center ${stat.color}`}
+                className={`w-8 h-8 rounded-md bg-border/50 flex items-center justify-center ${stat.color}`}
               >
                 <stat.icon size={16} />
               </div>
-              <span className="text-2xl font-serif">{stat.value}</span>
+              <span className="text-2xl font-mono font-medium">
+                {stat.value}
+              </span>
             </div>
             <div className="flex flex-col gap-1">
               <span className="text-sm text-muted-foreground">
                 {stat.label}
               </span>
-              <div
-                className={`flex items-center gap-1 text-xs ${stat.trend === "up" ? "text-green-500" : "text-red-500"}`}
-              >
+              <div className="flex items-center gap-1 text-xs font-mono text-muted-foreground">
                 {stat.trend === "up" ? (
                   <ArrowUp size={12} />
                 ) : (
                   <ArrowDown size={12} />
                 )}
-                <span>{stat.percent}</span>
-                <span className="text-muted-foreground ml-1">
+                <span className="text-foreground font-medium">
+                  {stat.percent}
+                </span>
+                <span className="text-muted-foreground ml-1 font-sans">
                   vs last 7 days
                 </span>
               </div>
@@ -195,40 +222,24 @@ export default function CandidatesView({ title }: { title?: string }) {
         <div className="flex-1 w-full flex flex-col min-w-0">
           {/* Tabs */}
           <div className="flex items-center gap-6 border-b border-border mb-6 overflow-x-auto pb-1 hide-scrollbar text-sm">
-            <div className="flex items-center gap-2 pb-2 border-b-2 border-accent text-foreground whitespace-nowrap cursor-pointer">
-              <span>Strong matches</span>
-              <span className="bg-muted px-1.5 py-0.5 rounded text-xs">12</span>
-            </div>
-            <div className="flex items-center gap-2 pb-2 border-b-2 border-transparent text-muted-foreground hover:text-foreground whitespace-nowrap cursor-pointer">
-              <span>All candidates</span>
-              <span className="bg-muted/50 px-1.5 py-0.5 rounded text-xs">
-                127
-              </span>
-            </div>
-            <div className="flex items-center gap-2 pb-2 border-b-2 border-transparent text-muted-foreground hover:text-foreground whitespace-nowrap cursor-pointer">
-              <span>To review</span>
-              <span className="bg-muted/50 px-1.5 py-0.5 rounded text-xs">
-                23
-              </span>
-            </div>
-            <div className="flex items-center gap-2 pb-2 border-b-2 border-transparent text-muted-foreground hover:text-foreground whitespace-nowrap cursor-pointer">
-              <span>Interview</span>
-              <span className="bg-muted/50 px-1.5 py-0.5 rounded text-xs">
-                4
-              </span>
-            </div>
-            <div className="flex items-center gap-2 pb-2 border-b-2 border-transparent text-muted-foreground hover:text-foreground whitespace-nowrap cursor-pointer">
-              <span>Offer</span>
-              <span className="bg-muted/50 px-1.5 py-0.5 rounded text-xs">
-                3
-              </span>
-            </div>
-            <div className="flex items-center gap-2 pb-2 border-b-2 border-transparent text-muted-foreground hover:text-foreground whitespace-nowrap cursor-pointer">
-              <span>Archived</span>
-              <span className="bg-muted/50 px-1.5 py-0.5 rounded text-xs">
-                18
-              </span>
-            </div>
+            {tabs.map((tab) => (
+              <div
+                key={tab.name}
+                onClick={() => setActiveTab(tab.name as any)}
+                className={`flex items-center gap-2 pb-2 border-b-2 whitespace-nowrap cursor-pointer transition-colors ${
+                  activeTab === tab.name
+                    ? "border-foreground text-foreground"
+                    : "border-transparent text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <span>{tab.name}</span>
+                <span
+                  className={`px-1.5 py-0.5 rounded text-xs font-mono ${activeTab === tab.name ? "bg-muted" : "bg-muted/50"}`}
+                >
+                  {tab.count}
+                </span>
+              </div>
+            ))}
           </div>
 
           {/* Search & Actions Bar */}
@@ -240,15 +251,13 @@ export default function CandidatesView({ title }: { title?: string }) {
               />
               <input
                 type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search candidates by name, skills, company..."
-                className="w-full pl-9 pr-4 py-2 bg-surface border border-border rounded-lg text-sm focus:outline-none focus:border-accent transition-colors"
+                className="w-full pl-9 pr-4 py-2 bg-surface border border-border rounded-lg text-sm focus:outline-none focus:border-foreground transition-colors"
               />
             </div>
             <div className="flex items-center gap-3 w-full md:w-auto">
-              <button className="flex items-center justify-center gap-2 px-4 py-2 bg-surface border border-border rounded-lg text-sm hover:bg-muted/50 transition-colors">
-                <Filter size={16} />
-                <span>Filters</span>
-              </button>
               <button className="flex items-center justify-center gap-2 px-4 py-2 bg-surface border border-border rounded-lg text-sm hover:bg-muted/50 transition-colors">
                 <ArrowDown size={14} className="rotate-180" />
                 <span>Sort: Relevance</span>
@@ -258,7 +267,7 @@ export default function CandidatesView({ title }: { title?: string }) {
           </div>
 
           {/* Table */}
-          <div className="w-full bg-surface border border-border rounded-xl overflow-x-auto shadow-sm">
+          <div className="w-full bg-surface border border-border rounded-lg overflow-x-auto shadow-sm">
             <table className="w-full text-sm text-left whitespace-nowrap">
               <thead>
                 <tr className="border-b border-border text-muted-foreground bg-muted/20">
@@ -274,68 +283,83 @@ export default function CandidatesView({ title }: { title?: string }) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
-                {candidates.map((c, i) => (
-                  <tr
-                    key={i}
-                    className="hover:bg-muted/30 transition-colors group"
-                  >
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-4">
-                        <Avatar className="h-10 w-10 border border-border bg-muted">
-                          <AvatarFallback className="text-muted-foreground font-medium">
-                            {c.initials}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="flex flex-col">
-                          <div className="flex items-center gap-2">
-                            <span className="font-medium text-foreground">
-                              {c.name}
-                            </span>
-                            {c.isStrongMatch && (
-                              <span className="text-[10px] px-1.5 py-0.5 rounded border border-accent/30 text-accent bg-accent/5">
-                                Strong match
-                              </span>
-                            )}
-                          </div>
-                          <span className="text-xs text-muted-foreground mt-0.5">
-                            {c.title}
-                          </span>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex flex-col gap-2 w-24">
-                        <span className="font-medium">{c.match}%</span>
-                        <div className="h-1 bg-border rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-accent rounded-full"
-                            style={{ width: `${c.match}%` }}
-                          />
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-muted-foreground">
-                      {c.role}
-                    </td>
-                    <td className="px-6 py-4 text-muted-foreground">{c.exp}</td>
-                    <td className="px-6 py-4 text-muted-foreground">
-                      {c.company}
-                    </td>
-                    <td className="px-6 py-4 text-muted-foreground">
-                      {c.added}
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button className="p-2 text-muted-foreground hover:text-foreground rounded-md hover:bg-muted transition-colors">
-                          <Bookmark size={16} />
-                        </button>
-                        <button className="p-2 text-muted-foreground hover:text-foreground rounded-md hover:bg-muted transition-colors">
-                          <MoreHorizontal size={16} />
-                        </button>
-                      </div>
+                {filteredCandidates.length === 0 ? (
+                  <tr>
+                    <td
+                      colSpan={7}
+                      className="px-6 py-12 text-center text-muted-foreground"
+                    >
+                      No candidates found.
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  filteredCandidates.map((c, i) => (
+                    <tr
+                      key={c.id}
+                      className="hover:bg-muted/30 transition-colors group"
+                    >
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-4">
+                          <Avatar className="h-8 w-8 rounded-md border border-border bg-muted">
+                            <AvatarFallback className="text-muted-foreground font-medium rounded-md text-xs">
+                              {c.initials}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="flex flex-col">
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium text-foreground">
+                                {c.name}
+                              </span>
+                              {c.matchScore >= 90 && (
+                                <span className="text-[10px] px-1.5 py-0.5 rounded border border-border text-foreground bg-muted/50">
+                                  Strong match
+                                </span>
+                              )}
+                            </div>
+                            <span className="text-xs text-muted-foreground mt-0.5">
+                              {c.role} at {c.company}
+                            </span>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex flex-col gap-2 w-24">
+                          <span className="font-mono font-medium text-xs">
+                            {c.matchScore}%
+                          </span>
+                          <div className="h-0.5 bg-border rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-foreground rounded-full"
+                              style={{ width: `${c.matchScore}%` }}
+                            />
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        {c.role}
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground font-mono text-xs">
+                        {c.experience}
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">
+                        {c.company}
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground font-mono text-xs">
+                        {c.addedAt}
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button className="p-2 text-muted-foreground hover:text-foreground rounded-md hover:bg-muted transition-colors">
+                            <Bookmark size={16} />
+                          </button>
+                          <button className="p-2 text-muted-foreground hover:text-foreground rounded-md hover:bg-muted transition-colors">
+                            <MoreHorizontal size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
 
@@ -344,7 +368,8 @@ export default function CandidatesView({ title }: { title?: string }) {
               <span className="text-sm text-muted-foreground">
                 Showing 1 to 7 of 127 candidates
               </span>
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 font-mono text-xs">
+                <span className="mr-2">Total: {filteredCandidates.length}</span>
                 <button className="w-8 h-8 flex items-center justify-center rounded border border-border text-muted-foreground hover:bg-muted/50 disabled:opacity-50">
                   <ChevronDown size={14} className="rotate-90" />
                 </button>
@@ -374,8 +399,16 @@ export default function CandidatesView({ title }: { title?: string }) {
         {/* Right Filters Sidebar */}
         <div className="w-full lg:w-[280px] flex-shrink-0 flex flex-col gap-6 lg:pl-2">
           <div className="flex items-center justify-between pb-2 border-b border-border">
-            <h3 className="font-serif text-lg">Filters</h3>
-            <button className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+            <h3 className="font-semibold text-lg">Filters</h3>
+            <button
+              onClick={() => {
+                setSearchQuery("");
+                setFilterJob("All jobs");
+                setActiveTab("All candidates");
+                setMinMatch(0);
+              }}
+              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
               Clear all
             </button>
           </div>
@@ -383,7 +416,9 @@ export default function CandidatesView({ title }: { title?: string }) {
           <div className="flex flex-col gap-5">
             {/* Filter Search */}
             <div className="flex flex-col gap-2">
-              <label className="text-sm text-foreground">Search</label>
+              <label className="text-sm text-foreground">
+                Filter by name/role
+              </label>
               <div className="relative">
                 <Search
                   size={14}
@@ -391,84 +426,64 @@ export default function CandidatesView({ title }: { title?: string }) {
                 />
                 <input
                   type="text"
-                  placeholder="Search by name, skills..."
-                  className="w-full pl-8 pr-3 py-1.5 bg-surface border border-border rounded-md text-xs focus:outline-none focus:border-accent transition-colors"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search..."
+                  className="w-full pl-8 pr-3 py-1.5 bg-surface border border-border rounded-md text-xs focus:outline-none focus:border-foreground transition-colors"
                 />
               </div>
             </div>
 
             {/* Dropdowns */}
-            {[
-              { label: "Job", placeholder: "All jobs" },
-              { label: "Stage", placeholder: "All stages" },
-            ].map((f, i) => (
-              <div key={i} className="flex flex-col gap-2">
-                <label className="text-sm text-foreground">{f.label}</label>
-                <button className="flex items-center justify-between w-full px-3 py-1.5 bg-surface border border-border rounded-md text-xs text-muted-foreground hover:border-accent/50 transition-colors text-left">
-                  <span>{f.placeholder}</span>
-                  <ChevronDown size={14} />
-                </button>
-              </div>
-            ))}
+            <div className="flex flex-col gap-2">
+              <label className="text-sm text-foreground">Job</label>
+              <select
+                value={filterJob}
+                onChange={(e) => setFilterJob(e.target.value)}
+                className="flex items-center justify-between w-full px-3 py-1.5 bg-surface border border-border rounded-md text-xs text-foreground focus:border-foreground transition-colors outline-none cursor-pointer appearance-none"
+              >
+                <option value="All jobs">All jobs</option>
+                {vacancies.map((v) => (
+                  <option key={v.id} value={v.id}>
+                    {v.title}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-            {/* Match Score Slider */}
+            {/* Match Score Slider (Simplified) */}
             <div className="flex flex-col gap-3 mt-2">
-              <label className="text-sm text-foreground">Match score</label>
-              <div className="relative h-1 bg-border rounded-full w-full">
-                <div className="absolute left-0 right-0 h-full bg-accent rounded-full" />
-                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-accent rounded-full border-2 border-background shadow-sm" />
-                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-accent rounded-full border-2 border-background shadow-sm" />
-              </div>
-              <div className="flex justify-between text-xs text-muted-foreground mt-1">
+              <label className="text-sm text-foreground">
+                Min Match Score: {minMatch}%
+              </label>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={minMatch}
+                onChange={(e) => setMinMatch(Number(e.target.value))}
+                className="w-full accent-foreground"
+              />
+              <div className="flex justify-between text-xs font-mono text-muted-foreground mt-1">
                 <span>0%</span>
                 <span>100%</span>
               </div>
             </div>
-
-            {/* More Dropdowns */}
-            {[
-              { label: "Location", placeholder: "All locations" },
-              { label: "Experience", placeholder: "All experience levels" },
-            ].map((f, i) => (
-              <div key={i} className="flex flex-col gap-2">
-                <label className="text-sm text-foreground">{f.label}</label>
-                <button className="flex items-center justify-between w-full px-3 py-1.5 bg-surface border border-border rounded-md text-xs text-muted-foreground hover:border-accent/50 transition-colors text-left">
-                  <span>{f.placeholder}</span>
-                  <ChevronDown size={14} />
-                </button>
-              </div>
-            ))}
-
-            {/* Skills */}
-            <div className="flex flex-col gap-2">
-              <label className="text-sm text-foreground">Skills</label>
-              <input
-                type="text"
-                placeholder="Add skills..."
-                className="w-full px-3 py-1.5 bg-surface border border-border rounded-md text-xs focus:outline-none focus:border-accent transition-colors"
-              />
-            </div>
-
-            {/* Tags & Added */}
-            {[
-              { label: "Tags", placeholder: "All tags" },
-              { label: "Added", placeholder: "Any time" },
-            ].map((f, i) => (
-              <div key={i} className="flex flex-col gap-2">
-                <label className="text-sm text-foreground">{f.label}</label>
-                <button className="flex items-center justify-between w-full px-3 py-1.5 bg-surface border border-border rounded-md text-xs text-muted-foreground hover:border-accent/50 transition-colors text-left">
-                  <span>{f.placeholder}</span>
-                  <ChevronDown size={14} />
-                </button>
-              </div>
-            ))}
           </div>
 
           <div className="flex flex-col gap-3 mt-6">
-            <button className="w-full py-2 bg-accent text-background font-medium rounded-lg text-sm hover:bg-accent/90 transition-colors shadow-sm">
-              Apply filters
+            <button
+              onClick={() => {
+                setSearchQuery("");
+                setFilterJob("All jobs");
+                setActiveTab("All candidates");
+                setMinMatch(0);
+              }}
+              className="w-full py-2 bg-foreground text-background font-medium rounded-md text-sm hover:bg-foreground/90 transition-colors shadow-sm"
+            >
+              Reset filters
             </button>
-            <button className="w-full py-2 bg-transparent text-muted-foreground font-medium rounded-lg text-sm hover:text-foreground transition-colors flex items-center justify-center gap-2">
+            <button className="w-full py-2 bg-transparent text-muted-foreground font-medium rounded-md text-sm hover:text-foreground transition-colors flex items-center justify-center gap-2">
               <Bookmark size={14} />
               Save as view
             </button>

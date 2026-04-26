@@ -12,13 +12,13 @@ export default function RegisterView({
   return (
     <motion.div
       key="register"
-      initial={{ opacity: 0, scale: 1.05, y: 40, filter: "blur(10px)" }}
-      animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }}
-      exit={{ opacity: 0, scale: 0.95, y: -20, filter: "blur(10px)" }}
-      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.3 }}
       className="w-full max-w-md mx-auto flex flex-col"
     >
-      <div className="bg-surface/80 backdrop-blur-xl border border-border p-8 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col text-left relative overflow-hidden">
+      <div className="bg-surface border border-border p-8 rounded-lg shadow-sm flex flex-col text-left relative overflow-hidden">
         <Tabs defaultValue="register" className="w-full">
           <TabsList className="mb-6">
             <TabsTrigger value="login">Вход</TabsTrigger>
@@ -27,7 +27,7 @@ export default function RegisterView({
 
           <TabsContent value="login" className="flex flex-col gap-6">
             <div className="flex flex-col">
-              <h2 className="text-3xl font-serif text-foreground mb-2">
+              <h2 className="text-2xl font-semibold text-foreground mb-2">
                 С возвращением
               </h2>
               <p className="text-sm text-muted-foreground">
@@ -53,7 +53,7 @@ export default function RegisterView({
 
           <TabsContent value="register" className="flex flex-col gap-6">
             <div className="flex flex-col">
-              <h2 className="text-3xl font-serif text-foreground mb-2">
+              <h2 className="text-2xl font-semibold text-foreground mb-2">
                 Начать работу
               </h2>
               <p className="text-sm text-muted-foreground">

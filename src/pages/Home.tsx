@@ -3,7 +3,6 @@ import { Moon, Sun } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../hooks/useTheme";
-import HighEndDotField from "../components/HighEndDotField";
 import LandingView from "../components/views/LandingView";
 import RegisterView from "../components/views/RegisterView";
 
@@ -44,8 +43,6 @@ export default function Home() {
 
   return (
     <div className="relative min-h-screen w-full bg-background text-foreground overflow-hidden font-sans flex flex-col">
-      <HighEndDotField isDark={isDark} />
-
       {/* Theme Switcher */}
       <button
         onClick={toggleTheme}
