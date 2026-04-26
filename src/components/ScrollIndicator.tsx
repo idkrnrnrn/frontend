@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 
 export default function ScrollIndicator() {
   return (
-    <motion.div 
+    <motion.div
       className="absolute bottom-12 flex flex-col items-center gap-2 text-muted-foreground/60"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}

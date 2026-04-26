@@ -12,12 +12,16 @@ export default function LandingView() {
       className="max-w-4xl mx-auto flex flex-col items-center"
     >
       <h1 className="font-serif text-6xl md:text-8xl lg:text-[8.5rem] leading-[0.95] tracking-tight text-foreground mb-8">
-        Вопрос найма,<br />
+        Вопрос найма,
+        <br />
         <span className="text-accent italic">закрыт.</span>
       </h1>
 
       <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-2xl font-light mb-14">
-        Screenr превращает хаотичные потоки резюме в структурированный граф компетенций. Мы находим скрытые сигналы и сопоставляем реальный опыт кандидатов с вашими техническими требованиями, исключая человеческий фактор.
+        Screenr превращает хаотичные потоки резюме в структурированный граф
+        компетенций. Мы находим скрытые сигналы и сопоставляем реальный опыт
+        кандидатов с вашими техническими требованиями, исключая человеческий
+        фактор.
       </p>
 
       <ScrollIndicator />

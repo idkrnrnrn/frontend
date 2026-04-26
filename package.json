@@ -27,6 +27,8 @@
     "radix-ui": "^1.4.3",
     "react": "latest",
     "react-dom": "latest",
+    "react-router-dom": "^7.14.2",
+    "recharts": "^3.8.1",
     "tailwind-merge": "latest",
     "tailwindcss": "latest",
     "vite": "latest"

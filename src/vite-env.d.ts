@@ -8,4 +8,3 @@ interface Document {
     skipTransition(): void;
   };
 }
-
