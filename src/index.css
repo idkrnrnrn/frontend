@@ -20,10 +20,20 @@
 :root {
   --background: #FFFFFF;
   --foreground: #05310A;
-  --surface: #FFFFFF;
-  --border: #EAFBDC;
-  --muted: #EAFBDC;
-  --muted-foreground: #0F5A05;
+  --surface: #FAFAFA;
+  --border: #EAEAEA;
+  --muted: #F5F5F5;
+  --muted-foreground: #71717A;
+  --accent: #0F5A05;
+}
+
+.dark {
+  --background: #000000;
+  --foreground: #EAFBDC;
+  --surface: #0a0a0a;
+  --border: #222222;
+  --muted: #111111;
+  --muted-foreground: #888888;
   --accent: #0F5A05;
 }
 

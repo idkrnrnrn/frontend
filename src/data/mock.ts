@@ -41,6 +41,25 @@ export const initialVacancies: Vacancy[] = [
     title: "Senior React Developer",
     description:
       "Deep knowledge of React, TypeScript, and high-load architectures.",
+    responsibilities:
+      "- Build and maintain complex product surfaces\n- Partner with design and backend on release delivery\n- Improve performance and reliability across the app",
+    mustHaves:
+      "- 4+ years with React in production\n- Strong TypeScript fundamentals\n- Experience owning UI architecture decisions",
+    niceToHaves:
+      "- Experience with design systems\n- Familiarity with experimentation tooling\n- Mentoring junior engineers",
+    stopFactors:
+      "- No recent hands-on frontend ownership\n- Unclear communication about shipped work\n- Not available for overlap with the product team",
+    conditions:
+      "- Remote across Europe\n- Core collaboration hours: 10:00-16:00 CET\n- Full-time only",
+    weights: {
+      experience: 30,
+      skills: 25,
+      schedule: 10,
+      location: 10,
+      motivation: 10,
+      readiness: 10,
+      communication: 5,
+    },
     status: "Active",
     updatedAt: "Yesterday",
   },
@@ -49,6 +68,25 @@ export const initialVacancies: Vacancy[] = [
     title: "Backend Engineer (Go)",
     description:
       "Experience with microservices in Go, PostgreSQL, and Kubernetes.",
+    responsibilities:
+      "- Build internal services for hiring workflows\n- Improve API latency and failure recovery\n- Own observability for core screening pipelines",
+    mustHaves:
+      "- Strong Go experience in production\n- PostgreSQL query tuning\n- Experience with service ownership in Kubernetes",
+    niceToHaves:
+      "- Event-driven systems\n- Messaging queues\n- Experience in B2B SaaS",
+    stopFactors:
+      "- Limited backend ownership depth\n- No production debugging examples\n- Cannot support on-call rotation",
+    conditions:
+      "- Hybrid in Warsaw or remote in Poland\n- On-call rotation once every 6 weeks\n- Full-time only",
+    weights: {
+      experience: 25,
+      skills: 30,
+      schedule: 10,
+      location: 10,
+      motivation: 10,
+      readiness: 10,
+      communication: 5,
+    },
     status: "Active",
     updatedAt: "2 days ago",
   },
@@ -56,6 +94,25 @@ export const initialVacancies: Vacancy[] = [
     id: "3",
     title: "Product Designer",
     description: "Figma expert with a strong portfolio in B2B SaaS.",
+    responsibilities:
+      "- Lead end-to-end flows for screening and recruiter tooling\n- Turn user research into shippable interaction patterns\n- Collaborate closely with product and engineering",
+    mustHaves:
+      "- Strong portfolio in B2B workflows\n- High proficiency in Figma\n- Experience shipping product changes with engineers",
+    niceToHaves:
+      "- Design systems experience\n- Qualitative user research\n- Marketplace or hiring product background",
+    stopFactors:
+      "- Portfolio lacks workflow depth\n- No systems thinking examples\n- Unable to explain tradeoffs in decision making",
+    conditions:
+      "- Remote-friendly\n- Portfolio review required\n- Contract-to-hire possible",
+    weights: {
+      experience: 20,
+      skills: 25,
+      schedule: 10,
+      location: 5,
+      motivation: 10,
+      readiness: 10,
+      communication: 20,
+    },
     status: "Active",
     updatedAt: "1 week ago",
   },

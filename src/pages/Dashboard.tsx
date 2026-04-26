@@ -18,14 +18,16 @@ import {
   Search,
   LayoutGrid,
   ArrowLeft,
+  Copy,
+  MessageSquareText,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { useTheme } from "../hooks/useTheme";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import AnalyticsView from "./views/AnalyticsView";
 import CandidatesView from "./views/CandidatesView";
+import VacancyChatView from "./views/VacancyChatView";
 import {
   initialVacancies,
   initialCandidates,
@@ -53,6 +55,7 @@ function VacanciesView({
 }) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [copiedVacancyId, setCopiedVacancyId] = useState<string | null>(null);
 
   // Form State
   const [newTitle, setNewTitle] = useState("");
@@ -87,6 +90,21 @@ function VacanciesView({
     setOpen(false);
   };
 
+  const handleCopyChatLink = async (vacancyId: string) => {
+    const url =
+      typeof window === "undefined"
+        ? `/dashboard/vacancies/${vacancyId}/chat`
+        : `${window.location.origin}/dashboard/vacancies/${vacancyId}/chat`;
+
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopiedVacancyId(vacancyId);
+      window.setTimeout(() => setCopiedVacancyId(null), 1600);
+    } catch {
+      setCopiedVacancyId(null);
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -105,7 +123,7 @@ function VacanciesView({
 
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <button className="bg-foreground text-background hover:bg-foreground/90 px-4 py-2 rounded-md text-sm font-medium transition-colors">
+            <button className="bg-accent text-white hover:bg-accent/90 px-4 py-2 rounded-md text-sm font-medium transition-colors">
               Создать вакансию
             </button>
           </DialogTrigger>
@@ -288,7 +306,7 @@ function VacanciesView({
                 </DialogClose>
                 <button
                   type="submit"
-                  className="px-4 py-2 text-sm font-medium bg-foreground text-background rounded-md hover:bg-foreground/90 transition-colors"
+                  className="px-4 py-2 text-sm font-medium bg-accent text-white rounded-md hover:bg-accent/90 transition-colors"
                 >
                   Создать вакансию
                 </button>
@@ -303,6 +321,14 @@ function VacanciesView({
           <div
             key={vac.id}
             onClick={() => navigate(`/dashboard/vacancies/${vac.id}`)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                navigate(`/dashboard/vacancies/${vac.id}`);
+              }
+            }}
+            role="button"
+            tabIndex={0}
             className="p-5 border border-border bg-surface/50 rounded-lg hover:bg-surface transition-colors cursor-pointer group"
           >
             <div className="flex justify-between items-start mb-4">
@@ -319,9 +345,35 @@ function VacanciesView({
             <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
               {vac.description}
             </p>
-            <div className="mt-4 pt-4 border-t border-border flex justify-between items-center text-sm text-muted-foreground">
-              <span>{vac.id}</span>
-              <span>Updated {vac.updatedAt}</span>
+            <div className="mt-4 pt-4 border-t border-border flex flex-col gap-3">
+              <div className="flex justify-between items-center text-sm text-muted-foreground">
+                <span>{vac.id}</span>
+                <span>Updated {vac.updatedAt}</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    navigate(`/dashboard/vacancies/${vac.id}/chat`);
+                  }}
+                  className="inline-flex items-center gap-2 rounded-full bg-accent px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-accent/90"
+                >
+                  <MessageSquareText size={14} />
+                  Open chat
+                </button>
+                <button
+                  type="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    void handleCopyChatLink(vac.id);
+                  }}
+                  className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-3 py-2 text-xs font-medium text-foreground transition-colors hover:bg-muted"
+                >
+                  <Copy size={14} />
+                  {copiedVacancyId === vac.id ? "Link copied" : "Copy link"}
+                </button>
+              </div>
             </div>
           </div>
         ))}
@@ -358,9 +410,27 @@ function VacancyCandidatesWrapper({
 }) {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [copied, setCopied] = useState(false);
 
   const vacancy = vacancies.find((v) => v.id === id);
   const title = vacancy ? vacancy.title : "Vacancy";
+
+  const handleCopyChatLink = async () => {
+    if (!id) return;
+
+    const url =
+      typeof window === "undefined"
+        ? `/dashboard/vacancies/${id}/chat`
+        : `${window.location.origin}/dashboard/vacancies/${id}/chat`;
+
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1600);
+    } catch {
+      setCopied(false);
+    }
+  };
 
   return (
     <motion.div
@@ -377,6 +447,37 @@ function VacancyCandidatesWrapper({
         <ArrowLeft size={16} />
         Back to Vacancies
       </button>
+      <div className="mb-6 flex flex-col gap-3 rounded-3xl border border-border bg-surface/40 p-4 md:flex-row md:items-center md:justify-between md:p-5">
+        <div className="min-w-0">
+          <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
+            Additive workflow
+          </div>
+          <h2 className="mt-2 text-xl font-semibold text-foreground">
+            Candidate pipeline plus guided screening chat
+          </h2>
+          <p className="mt-1 max-w-2xl text-sm leading-6 text-muted-foreground">
+            Keep the structured vacancy review here, or open the mobile-first chat flow when you want the candidate-facing screening experience.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => navigate(`/dashboard/vacancies/${id}/chat`)}
+            className="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-accent/90"
+          >
+            <MessageSquareText size={15} />
+            Open screening chat
+          </button>
+          <button
+            type="button"
+            onClick={() => void handleCopyChatLink()}
+            className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+          >
+            <Copy size={15} />
+            {copied ? "Link copied" : "Copy chat link"}
+          </button>
+        </div>
+      </div>
       <CandidatesView
         title={title}
         candidates={candidates}
@@ -384,6 +485,43 @@ function VacancyCandidatesWrapper({
         selectedVacancyId={id}
       />
     </motion.div>
+  );
+}
+
+function VacancyChatWrapper({
+  candidates,
+  vacancies,
+}: {
+  candidates: Candidate[];
+  vacancies: Vacancy[];
+}) {
+  const { id } = useParams();
+  const vacancy = vacancies.find((item) => item.id === id);
+
+  if (!vacancy) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+        transition={{ duration: 0.3 }}
+        className="rounded-3xl border border-border bg-surface/50 p-8"
+      >
+        <h2 className="text-xl font-semibold text-foreground">
+          Vacancy not found
+        </h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          This chat flow needs a valid vacancy before it can start.
+        </p>
+      </motion.div>
+    );
+  }
+
+  return (
+    <VacancyChatView
+      vacancy={vacancy}
+      candidates={candidates.filter((candidate) => candidate.vacancyId === id)}
+    />
   );
 }
 
@@ -401,7 +539,6 @@ function AnalyticsWrapper() {
 }
 
 export default function Dashboard() {
-  const { isDark, toggleTheme } = useTheme();
   const location = useLocation();
 
   const [vacancies, setVacancies] = useState<Vacancy[]>(initialVacancies);
@@ -428,13 +565,69 @@ export default function Dashboard() {
     { name: "Analytics", path: "/dashboard/analytics", icon: BarChart },
   ];
 
+  const routes = (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route
+          path="/"
+          element={
+            <VacanciesView
+              vacancies={vacancies}
+              onCreate={handleCreateVacancy}
+            />
+          }
+        />
+        <Route
+          path="/vacancies/:id"
+          element={
+            <VacancyCandidatesWrapper
+              candidates={candidates}
+              vacancies={vacancies}
+            />
+          }
+        />
+        <Route
+          path="/vacancies/:id/chat"
+          element={
+            <VacancyChatWrapper
+              candidates={candidates}
+              vacancies={vacancies}
+            />
+          }
+        />
+        <Route
+          path="/resumes"
+          element={
+            <CandidatesWrapper
+              candidates={candidates}
+              vacancies={vacancies}
+            />
+          }
+        />
+        <Route path="/analytics" element={<AnalyticsWrapper />} />
+      </Routes>
+    </AnimatePresence>
+  );
+
+  const isChatRoute = /^\/dashboard\/vacancies\/[^/]+\/chat\/?$/.test(
+    location.pathname,
+  );
+
+  if (isChatRoute) {
+    return (
+      <div className="min-h-screen bg-background text-foreground font-sans">
+        {routes}
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col md:flex-row font-sans">
       {/* Sidebar */}
       <aside className="w-full md:w-64 border-r border-border bg-surface/50 flex flex-col flex-shrink-0">
         <div className="p-6 flex items-center gap-2">
-          <div className="w-8 h-8 rounded-md bg-foreground flex items-center justify-center text-background">
-            <div className="w-3 h-3 rounded-sm bg-background" />
+          <div className="w-8 h-8 rounded-md bg-accent flex items-center justify-center text-white">
+            <div className="w-3 h-3 rounded-sm bg-white" />
           </div>
           <span className="font-semibold text-xl tracking-tight">Screenr</span>
         </div>
@@ -508,38 +701,7 @@ export default function Dashboard() {
         {/* Page Content */}
         <main className="flex-1 overflow-y-auto p-6 md:p-10 bg-background/50">
           <div className="max-w-6xl mx-auto">
-            <AnimatePresence mode="wait">
-              <Routes location={location} key={location.pathname}>
-                <Route
-                  path="/"
-                  element={
-                    <VacanciesView
-                      vacancies={vacancies}
-                      onCreate={handleCreateVacancy}
-                    />
-                  }
-                />
-                <Route
-                  path="/vacancies/:id"
-                  element={
-                    <VacancyCandidatesWrapper
-                      candidates={candidates}
-                      vacancies={vacancies}
-                    />
-                  }
-                />
-                <Route
-                  path="/resumes"
-                  element={
-                    <CandidatesWrapper
-                      candidates={candidates}
-                      vacancies={vacancies}
-                    />
-                  }
-                />
-                <Route path="/analytics" element={<AnalyticsWrapper />} />
-              </Routes>
-            </AnimatePresence>
+            {routes}
           </div>
         </main>
       </div>
