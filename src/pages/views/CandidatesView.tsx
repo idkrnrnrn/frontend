@@ -27,11 +27,11 @@ export default function CandidatesView({
   selectedVacancyId?: string;
 }) {
   const [activeTab, setActiveTab] = useState<
-    Stage | "All candidates" | "Strong matches"
-  >("All candidates");
+    Stage | "Все кандидаты" | "Сильные совпадения"
+  >("Все кандидаты");
   const [searchQuery, setSearchQuery] = useState("");
   const [filterJob, setFilterJob] = useState<string>(
-    selectedVacancyId || "All jobs",
+    selectedVacancyId || "Все вакансии",
   );
 
   // Minimal filter state
@@ -40,13 +40,13 @@ export default function CandidatesView({
   const filteredCandidates = useMemo(() => {
     return candidates.filter((c) => {
       // Job filter
-      if (filterJob !== "All jobs" && c.vacancyId !== filterJob) return false;
+      if (filterJob !== "Все вакансии" && c.vacancyId !== filterJob) return false;
 
       // Tab filter
-      if (activeTab === "Strong matches" && c.matchScore < 90) return false;
+      if (activeTab === "Сильные совпадения" && c.matchScore < 90) return false;
       if (
-        activeTab !== "All candidates" &&
-        activeTab !== "Strong matches" &&
+        activeTab !== "Все кандидаты" &&
+        activeTab !== "Сильные совпадения" &&
         c.stage !== activeTab
       )
         return false;
@@ -72,56 +72,56 @@ export default function CandidatesView({
 
   const tabs = [
     {
-      name: "Strong matches",
+      name: "Сильные совпадения",
       count: candidates.filter(
         (c) =>
           c.matchScore >= 90 &&
-          (filterJob === "All jobs" || c.vacancyId === filterJob),
+          (filterJob === "Все вакансии" || c.vacancyId === filterJob),
       ).length,
     },
     {
-      name: "All candidates",
+      name: "Все кандидаты",
       count: candidates.filter(
-        (c) => filterJob === "All jobs" || c.vacancyId === filterJob,
+        (c) => filterJob === "Все вакансии" || c.vacancyId === filterJob,
       ).length,
     },
     {
-      name: "New",
-      count: candidates.filter(
-        (c) =>
-          c.stage === "New" &&
-          (filterJob === "All jobs" || c.vacancyId === filterJob),
-      ).length,
-    },
-    {
-      name: "Screened",
+      name: "Новые",
       count: candidates.filter(
         (c) =>
-          c.stage === "Screened" &&
-          (filterJob === "All jobs" || c.vacancyId === filterJob),
+          c.stage === "Новые" &&
+          (filterJob === "Все вакансии" || c.vacancyId === filterJob),
       ).length,
     },
     {
-      name: "Interview",
+      name: "Отскриненные",
       count: candidates.filter(
         (c) =>
-          c.stage === "Interview" &&
-          (filterJob === "All jobs" || c.vacancyId === filterJob),
+          c.stage === "Отскриненные" &&
+          (filterJob === "Все вакансии" || c.vacancyId === filterJob),
       ).length,
     },
     {
-      name: "Offer",
+      name: "Интервью",
       count: candidates.filter(
         (c) =>
-          c.stage === "Offer" &&
-          (filterJob === "All jobs" || c.vacancyId === filterJob),
+          c.stage === "Интервью" &&
+          (filterJob === "Все вакансии" || c.vacancyId === filterJob),
+      ).length,
+    },
+    {
+      name: "Оффер",
+      count: candidates.filter(
+        (c) =>
+          c.stage === "Оффер" &&
+          (filterJob === "Все вакансии" || c.vacancyId === filterJob),
       ).length,
     },
   ];
 
   const stats = [
     {
-      label: "Total candidates",
+      label: "Всего кандидатов",
       value: candidates.length,
       icon: UserPlus,
       trend: "up",
@@ -129,7 +129,7 @@ export default function CandidatesView({
       color: "text-muted-foreground",
     },
     {
-      label: "Strong matches",
+      label: "Сильные совпадения",
       value: candidates.filter((c) => c.matchScore >= 90).length,
       icon: Sparkles,
       trend: "up",
@@ -137,24 +137,24 @@ export default function CandidatesView({
       color: "text-foreground",
     },
     {
-      label: "To review",
-      value: candidates.filter((c) => c.stage === "New").length,
+      label: "На проверке",
+      value: candidates.filter((c) => c.stage === "Новые").length,
       icon: Clock,
       trend: "down",
       percent: "4%",
       color: "text-muted-foreground",
     },
     {
-      label: "Interviews",
-      value: candidates.filter((c) => c.stage === "Interview").length,
+      label: "Интервью",
+      value: candidates.filter((c) => c.stage === "Интервью").length,
       icon: Calendar,
       trend: "up",
       percent: "2",
       color: "text-muted-foreground",
     },
     {
-      label: "Offers",
-      value: candidates.filter((c) => c.stage === "Offer").length,
+      label: "Офферы",
+      value: candidates.filter((c) => c.stage === "Оффер").length,
       icon: Award,
       trend: "up",
       percent: "1",
@@ -168,11 +168,11 @@ export default function CandidatesView({
         <h1 className="text-2xl font-semibold">
           {title ? (
             <>
-              Candidates for{" "}
+              Кандидаты по вакансии{" "}
               <span className="text-muted-foreground">{title}</span>
             </>
           ) : (
-            "Candidates"
+            "Кандидаты"
           )}
         </h1>
       </div>
@@ -208,7 +208,7 @@ export default function CandidatesView({
                   {stat.percent}
                 </span>
                 <span className="text-muted-foreground ml-1 font-sans">
-                  vs last 7 days
+                  к прошлым 7 дням
                 </span>
               </div>
             </div>
@@ -253,14 +253,14 @@ export default function CandidatesView({
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search candidates by name, skills, company..."
+                placeholder="Поиск кандидатов по имени, навыкам, компании..."
                 className="w-full pl-9 pr-4 py-2 bg-surface border border-border rounded-lg text-sm focus:outline-none focus:border-foreground transition-colors"
               />
             </div>
             <div className="flex items-center gap-3 w-full md:w-auto">
               <button className="flex items-center justify-center gap-2 px-4 py-2 bg-surface border border-border rounded-lg text-sm hover:bg-muted/50 transition-colors">
                 <ArrowDown size={14} className="rotate-180" />
-                <span>Sort: Relevance</span>
+                <span>Сортировка: релевантность</span>
                 <ChevronDown size={14} className="ml-1 text-muted-foreground" />
               </button>
             </div>
@@ -271,13 +271,13 @@ export default function CandidatesView({
             <table className="w-full text-sm text-left whitespace-nowrap">
               <thead>
                 <tr className="border-b border-border text-muted-foreground bg-muted/20">
-                  <th className="px-6 py-4 font-medium">Candidate</th>
-                  <th className="px-6 py-4 font-medium">Match</th>
-                  <th className="px-6 py-4 font-medium">Current role</th>
-                  <th className="px-6 py-4 font-medium">Experience</th>
-                  <th className="px-6 py-4 font-medium">Current company</th>
+                  <th className="px-6 py-4 font-medium">Кандидат</th>
+                  <th className="px-6 py-4 font-medium">Совпадение</th>
+                  <th className="px-6 py-4 font-medium">Текущая роль</th>
+                  <th className="px-6 py-4 font-medium">Опыт</th>
+                  <th className="px-6 py-4 font-medium">Текущая компания</th>
                   <th className="px-6 py-4 font-medium flex items-center gap-1">
-                    Added <ArrowDown size={12} />
+                    Добавлен <ArrowDown size={12} />
                   </th>
                   <th className="px-6 py-4 font-medium text-right"></th>
                 </tr>
@@ -289,7 +289,7 @@ export default function CandidatesView({
                       colSpan={7}
                       className="px-6 py-12 text-center text-muted-foreground"
                     >
-                      No candidates found.
+                      Кандидаты не найдены.
                     </td>
                   </tr>
                 ) : (
@@ -312,12 +312,12 @@ export default function CandidatesView({
                               </span>
                               {c.matchScore >= 90 && (
                                 <span className="text-[10px] px-1.5 py-0.5 rounded border border-border text-foreground bg-muted/50">
-                                  Strong match
+                                  Сильное совпадение
                                 </span>
                               )}
                             </div>
                             <span className="text-xs text-muted-foreground mt-0.5">
-                              {c.role} at {c.company}
+                              {c.role} в {c.company}
                             </span>
                           </div>
                         </div>
@@ -366,10 +366,10 @@ export default function CandidatesView({
             {/* Pagination footer */}
             <div className="flex items-center justify-between px-6 py-4 border-t border-border bg-muted/10">
               <span className="text-sm text-muted-foreground">
-                Showing 1 to 7 of 127 candidates
+                Показаны 1-7 из 127 кандидатов
               </span>
               <div className="flex items-center gap-1 font-mono text-xs">
-                <span className="mr-2">Total: {filteredCandidates.length}</span>
+                <span className="mr-2">Всего: {filteredCandidates.length}</span>
                 <button className="w-8 h-8 flex items-center justify-center rounded border border-border text-muted-foreground hover:bg-muted/50 disabled:opacity-50">
                   <ChevronDown size={14} className="rotate-90" />
                 </button>
@@ -399,17 +399,17 @@ export default function CandidatesView({
         {/* Right Filters Sidebar */}
         <div className="w-full lg:w-[280px] flex-shrink-0 flex flex-col gap-6 lg:pl-2">
           <div className="flex items-center justify-between pb-2 border-b border-border">
-            <h3 className="font-semibold text-lg">Filters</h3>
+            <h3 className="font-semibold text-lg">Фильтры</h3>
             <button
               onClick={() => {
                 setSearchQuery("");
-                setFilterJob("All jobs");
-                setActiveTab("All candidates");
+                setFilterJob("Все вакансии");
+                setActiveTab("Все кандидаты");
                 setMinMatch(0);
               }}
               className="text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
-              Clear all
+              Сбросить всё
             </button>
           </div>
 
@@ -417,7 +417,7 @@ export default function CandidatesView({
             {/* Filter Search */}
             <div className="flex flex-col gap-2">
               <label className="text-sm text-foreground">
-                Filter by name/role
+                Фильтр по имени/роли
               </label>
               <div className="relative">
                 <Search
@@ -428,7 +428,7 @@ export default function CandidatesView({
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search..."
+                  placeholder="Поиск..."
                   className="w-full pl-8 pr-3 py-1.5 bg-surface border border-border rounded-md text-xs focus:outline-none focus:border-foreground transition-colors"
                 />
               </div>
@@ -436,13 +436,13 @@ export default function CandidatesView({
 
             {/* Dropdowns */}
             <div className="flex flex-col gap-2">
-              <label className="text-sm text-foreground">Job</label>
+              <label className="text-sm text-foreground">Вакансия</label>
               <select
                 value={filterJob}
                 onChange={(e) => setFilterJob(e.target.value)}
                 className="flex items-center justify-between w-full px-3 py-1.5 bg-surface border border-border rounded-md text-xs text-foreground focus:border-foreground transition-colors outline-none cursor-pointer appearance-none"
               >
-                <option value="All jobs">All jobs</option>
+                <option value="Все вакансии">Все вакансии</option>
                 {vacancies.map((v) => (
                   <option key={v.id} value={v.id}>
                     {v.title}
@@ -454,7 +454,7 @@ export default function CandidatesView({
             {/* Match Score Slider (Simplified) */}
             <div className="flex flex-col gap-3 mt-2">
               <label className="text-sm text-foreground">
-                Min Match Score: {minMatch}%
+                Мин. уровень совпадения: {minMatch}%
               </label>
               <input
                 type="range"
@@ -475,17 +475,17 @@ export default function CandidatesView({
             <button
               onClick={() => {
                 setSearchQuery("");
-                setFilterJob("All jobs");
-                setActiveTab("All candidates");
+                setFilterJob("Все вакансии");
+                setActiveTab("Все кандидаты");
                 setMinMatch(0);
               }}
               className="w-full py-2 bg-foreground text-background font-medium rounded-md text-sm hover:bg-foreground/90 transition-colors shadow-sm"
             >
-              Reset filters
+              Сбросить фильтры
             </button>
             <button className="w-full py-2 bg-transparent text-muted-foreground font-medium rounded-md text-sm hover:text-foreground transition-colors flex items-center justify-center gap-2">
               <Bookmark size={14} />
-              Save as view
+              Сохранить как вид
             </button>
           </div>
         </div>

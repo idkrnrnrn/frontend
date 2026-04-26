@@ -52,81 +52,81 @@ function buildQuestions(vacancy: Vacancy): ScreeningQuestion[] {
   return [
     {
       id: "availability",
-      label: "Availability",
+      label: "Доступность",
       prompt:
-        "Before we begin, can you confirm the working setup for this role fits what you are looking for?",
-      helper: "Keeps schedule and location aligned from the start.",
-      placeholder: "Share any constraints around schedule or location.",
+        "Перед началом подтвердите, что формат работы по этой вакансии вам подходит.",
+      helper: "Помогает сразу сверить график и локацию.",
+      placeholder: "Укажите ограничения по графику или местоположению.",
       kind: "choice",
       quickReplies:
         conditions.slice(0, 3).length > 0
           ? conditions.slice(0, 3)
           : [
-              "Full-time works for me",
-              "I need more detail on schedule",
-              "I have location constraints",
+              "Полная занятость мне подходит",
+              "Нужны детали по графику",
+              "У меня есть ограничения по локации",
             ],
     },
     {
       id: "experience",
-      label: "Relevant experience",
-      prompt: `How much hands-on experience do you have that is directly relevant to the ${vacancy.title} role?`,
-      helper: "High-signal range so recruiters can triage quickly.",
-      placeholder: "Summarize your most relevant years and scope.",
+      label: "Релевантный опыт",
+      prompt: `Сколько у вас практического опыта, напрямую релевантного роли ${vacancy.title}?`,
+      helper: "Короткая оценка, чтобы рекрутер быстрее сориентировался.",
+      placeholder: "Кратко опишите релевантные годы опыта и масштаб задач.",
       kind: "choice",
-      quickReplies: ["0-1 years", "2-3 years", "4-5 years", "6+ years"],
+      quickReplies: ["0-1 год", "2-3 года", "4-5 лет", "6+ лет"],
     },
     {
       id: "strength",
-      label: "Strongest area",
+      label: "Сильная сторона",
       prompt:
-        "Which requirement best represents the area where you can contribute with the most confidence?",
-      helper: "Matches the candidate's strongest signal against the role.",
-      placeholder: "If none of these fit, explain your strongest relevant area.",
+        "Какое требование лучше всего отражает область, в которой вы можете принести наибольшую пользу?",
+      helper: "Сопоставляет самый сильный сигнал кандидата с ролью.",
+      placeholder: "Если ничего не подходит, опишите свою самую сильную релевантную сторону.",
       kind: "choice",
       quickReplies:
         mustHaves.slice(0, 3).length > 0
           ? mustHaves.slice(0, 3)
           : [
-              "Hands-on execution",
-              "Team collaboration",
-              "Operational reliability",
+              "Практическая реализация",
+              "Командное взаимодействие",
+              "Надёжность процессов",
             ],
     },
     {
       id: "recent-work",
-      label: "Recent work",
+      label: "Недавний опыт",
       prompt:
         responsibilities[0] !== undefined
-          ? `Tell us about the most relevant work you have done recently, especially anything connected to "${responsibilities[0]}".`
-          : "Tell us about the most relevant work you have done recently.",
-      helper: "A short concrete example is enough here.",
-      placeholder: "Describe one recent example with scope, tools, and outcome.",
+          ? `Расскажите о самой релевантной недавней работе, особенно если она связана с "${responsibilities[0]}".`
+          : "Расскажите о самой релевантной недавней работе.",
+      helper: "Достаточно одного короткого и конкретного примера.",
+      placeholder: "Опишите один недавний пример: задачи, инструменты и результат.",
       kind: "text",
       quickReplies: [],
     },
     {
       id: "motivation",
-      label: "Motivation",
+      label: "Мотивация",
       prompt:
-        "Why does this role make sense for you right now, and what would make it a strong next step?",
-      helper: "Focus on fit, not a long personal statement.",
-      placeholder: "Keep it short and specific to the role.",
+        "Почему эта роль подходит вам именно сейчас и что сделает её сильным следующим шагом?",
+      helper: "Сфокусируйтесь на соответствии роли, без длинного рассказа о себе.",
+      placeholder: "Коротко и по делу, именно про эту роль.",
       kind: "text",
       quickReplies: [],
     },
     {
       id: "start-date",
-      label: "Start date",
-      prompt: "If the process moves forward, when could you realistically start?",
-      helper: "Lets the recruiter understand readiness without another follow-up.",
-      placeholder: "Share your notice period or earliest start date.",
+      label: "Дата выхода",
+      prompt: "Если процесс пойдёт дальше, когда вы реально сможете приступить к работе?",
+      helper: "Позволяет понять готовность кандидата без лишних уточнений.",
+      placeholder: "Укажите срок отработки или ближайшую возможную дату выхода.",
       kind: "choice",
       quickReplies: [
-        "Immediately",
-        "Within 2 weeks",
-        "Within 1 month",
-        "More than 1 month",
+        "Сразу",
+        "В течение 2 недель",
+        "В течение 1 месяца",
+        "Более чем через 1 месяц",
       ],
     },
   ];
@@ -141,18 +141,18 @@ function createTranscript(
     {
       id: "resume-received",
       role: "assistant",
-      content: `Resume received: ${resumeName}. We will use it as reference during screening.`,
+      content: `Резюме получено: ${resumeName}. Мы будем использовать его как основу во время скрининга.`,
     },
     {
       id: "intro-1",
       role: "assistant",
-      content: `Welcome. This is the screening flow for ${vacancy.title}. It takes about three minutes and moves one question at a time.`,
+      content: `Добро пожаловать. Это сценарий скрининга для вакансии ${vacancy.title}. Он занимает около трёх минут и проходит по одному вопросу за раз.`,
     },
     {
       id: "intro-2",
       role: "assistant",
       content:
-        "You can answer with quick replies or write your own response. We will keep the process brief and focused.",
+        "Вы можете выбирать быстрые ответы или написать свой вариант. Постараемся пройти процесс коротко и по делу.",
     },
     {
       id: "question-0",
@@ -197,7 +197,7 @@ export default function VacancyChatView({
     ? `${(resume.size / 1024 / 1024).toFixed(2)} MB`
     : null;
   const activeCandidates = candidates.filter(
-    (candidate) => candidate.stage !== "Archived",
+    (candidate) => candidate.stage !== "Архив",
   ).length;
 
   useEffect(() => {
@@ -253,7 +253,7 @@ export default function VacancyChatView({
       file.name.toLowerCase().endsWith(".pdf");
 
     if (!isPdf) {
-      setResumeError("Please upload a PDF resume.");
+      setResumeError("Пожалуйста, загрузите резюме в формате PDF.");
       return;
     }
 
@@ -352,7 +352,7 @@ export default function VacancyChatView({
           id: "completion-1",
           role: "assistant",
           content:
-            "Screening complete. Thank you. The team will review your resume together with these answers.",
+            "Скрининг завершён. Спасибо. Команда рассмотрит ваше резюме вместе с этими ответами.",
         },
       ]);
     }, 520);
@@ -382,19 +382,19 @@ export default function VacancyChatView({
               className="mb-2 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground transition-colors hover:text-foreground"
             >
               <ArrowLeft size={14} />
-              Exit chat
+              Выйти из чата
             </Link>
             <div className="truncate text-base font-semibold text-foreground sm:text-lg">
               {vacancy.title}
             </div>
             <div className="text-xs text-muted-foreground">
-              {activeCandidates} active candidates
+              {activeCandidates} активных кандидатов
             </div>
           </div>
 
           <div className="ml-4 w-24 shrink-0 sm:w-32">
             <div className="mb-2 flex items-center justify-between text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
-              <span>Progress</span>
+              <span>Прогресс</span>
               <span>{completedUnits}/{totalSteps}</span>
             </div>
             <div className="h-2 overflow-hidden rounded-full bg-border/80">
@@ -419,10 +419,10 @@ export default function VacancyChatView({
                   </div>
                   <div>
                     <h1 className="text-xl font-semibold tracking-tight text-foreground">
-                      Send your PDF resume first
+                      Сначала отправьте резюме в PDF
                     </h1>
                     <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                      Upload one resume to begin the screening. Questions will appear immediately after the file is attached.
+                      Загрузите одно резюме, чтобы начать скрининг. Вопросы появятся сразу после прикрепления файла.
                     </p>
                   </div>
 
@@ -433,10 +433,10 @@ export default function VacancyChatView({
                       </div>
                       <div>
                         <div className="text-sm font-medium text-foreground">
-                          PDF only
+                          Только PDF
                         </div>
                         <div className="text-sm leading-6 text-muted-foreground">
-                          Keep the file concise and current.
+                          Используйте актуальный и короткий файл.
                         </div>
                       </div>
                     </div>
@@ -448,7 +448,7 @@ export default function VacancyChatView({
                       className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-accent/90 disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       <Upload size={16} />
-                      {isUploadingResume ? "Uploading resume..." : "Upload PDF resume"}
+                      {isUploadingResume ? "Загрузка резюме..." : "Загрузить PDF-резюме"}
                     </button>
 
                     {resumeError && (
@@ -472,7 +472,7 @@ export default function VacancyChatView({
                           {resume?.name}
                         </div>
                         <div className="text-xs text-muted-foreground">
-                          Resume attached{resumeSizeLabel ? ` · ${resumeSizeLabel}` : ""}
+                          Резюме прикреплено{resumeSizeLabel ? ` · ${resumeSizeLabel}` : ""}
                         </div>
                       </div>
                     </div>
@@ -482,7 +482,7 @@ export default function VacancyChatView({
                       className="inline-flex shrink-0 items-center gap-1 rounded-full border border-border bg-white px-3 py-2 text-xs font-medium text-foreground transition-colors hover:bg-muted"
                     >
                       <X size={14} />
-                      Replace
+                      Заменить
                     </button>
                   </div>
                 </div>
@@ -528,7 +528,7 @@ export default function VacancyChatView({
                         <span className="h-1.5 w-1.5 rounded-full bg-foreground/30" />
                         <span className="h-1.5 w-1.5 rounded-full bg-foreground/20" />
                       </span>
-                      Preparing the next question
+                      Готовим следующий вопрос
                     </div>
                   </motion.div>
                 )}
@@ -545,17 +545,17 @@ export default function VacancyChatView({
                       </div>
                       <div className="min-w-0">
                         <div className="text-base font-semibold text-foreground">
-                          Screening complete
+                          Скрининг завершён
                         </div>
                         <p className="mt-1 text-sm leading-6 text-muted-foreground">
-                          Thank you. The team will review your resume and responses, then contact you about the next step.
+                          Спасибо. Команда рассмотрит ваше резюме и ответы, после чего свяжется с вами по следующему шагу.
                         </p>
                         <button
                           type="button"
                           onClick={resetFlow}
                           className="mt-4 rounded-full border border-border bg-white px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
                         >
-                          Restart screening
+                          Начать заново
                         </button>
                       </div>
                     </div>
@@ -574,7 +574,7 @@ export default function VacancyChatView({
                 className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-accent/90 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 <Upload size={16} />
-                {isUploadingResume ? "Uploading..." : "Upload PDF resume"}
+                {isUploadingResume ? "Загрузка..." : "Загрузить PDF-резюме"}
               </button>
             ) : (
               <>
@@ -598,12 +598,12 @@ export default function VacancyChatView({
                   <div className="mb-3">
                     <div className="text-sm font-medium text-foreground">
                       {isComplete
-                        ? "Conversation finished"
-                        : currentQuestion?.label ?? "Answer"}
+                        ? "Диалог завершён"
+                        : currentQuestion?.label ?? "Ответ"}
                     </div>
                     <div className="text-xs leading-5 text-muted-foreground">
                       {isComplete
-                        ? "The screening is complete."
+                        ? "Скрининг завершён."
                         : currentQuestion?.helper}
                     </div>
                   </div>
@@ -622,7 +622,7 @@ export default function VacancyChatView({
                       disabled={isWaiting || isComplete}
                       placeholder={
                         isComplete
-                          ? "Screening is complete."
+                          ? "Скрининг завершён."
                           : currentQuestion?.placeholder
                       }
                       className="min-h-[108px] resize-none rounded-[20px] border-border bg-white"
@@ -630,7 +630,7 @@ export default function VacancyChatView({
 
                     <div className="flex items-center justify-between gap-3">
                       <p className="text-xs text-muted-foreground">
-                        Press Enter to send
+                        Нажмите Enter для отправки
                       </p>
                       <button
                         type="button"
@@ -638,7 +638,7 @@ export default function VacancyChatView({
                         disabled={isWaiting || isComplete || !draft.trim()}
                         className="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-accent/90 disabled:cursor-not-allowed disabled:opacity-50"
                       >
-                        Send
+                        Отправить
                         <SendHorizontal size={15} />
                       </button>
                     </div>

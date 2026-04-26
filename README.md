@@ -1,3 +1,3 @@
-# Frontend
+# Фронтенд
 
-Link: https://frontend-wheat-rho-2xdv0j3mhf.vercel.app/
+Ссылка: https://frontend-wheat-rho-2xdv0j3mhf.vercel.app/

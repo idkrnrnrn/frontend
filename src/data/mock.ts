@@ -16,11 +16,11 @@ export type Vacancy = {
     readiness: number;
     communication: number;
   };
-  status: "Active" | "Closed";
+  status: "Активна" | "Закрыта";
   updatedAt: string;
 };
 
-export type Stage = "New" | "Screened" | "Interview" | "Offer" | "Archived";
+export type Stage = "Новые" | "Отскриненные" | "Интервью" | "Оффер" | "Архив";
 
 export type Candidate = {
   id: string;
@@ -38,19 +38,19 @@ export type Candidate = {
 export const initialVacancies: Vacancy[] = [
   {
     id: "1",
-    title: "Senior React Developer",
+    title: "Старший React-разработчик",
     description:
-      "Deep knowledge of React, TypeScript, and high-load architectures.",
+      "Глубокое знание React, TypeScript и высоконагруженных архитектур.",
     responsibilities:
-      "- Build and maintain complex product surfaces\n- Partner with design and backend on release delivery\n- Improve performance and reliability across the app",
+      "- Разрабатывать и поддерживать сложные продуктовые интерфейсы\n- Работать с дизайном и бэкендом над релизами\n- Улучшать производительность и надёжность приложения",
     mustHaves:
-      "- 4+ years with React in production\n- Strong TypeScript fundamentals\n- Experience owning UI architecture decisions",
+      "- 4+ года коммерческого опыта с React\n- Сильная база по TypeScript\n- Опыт принятия архитектурных решений по UI",
     niceToHaves:
-      "- Experience with design systems\n- Familiarity with experimentation tooling\n- Mentoring junior engineers",
+      "- Опыт работы с дизайн-системами\n- Знакомство с инструментами экспериментов\n- Наставничество для младших инженеров",
     stopFactors:
-      "- No recent hands-on frontend ownership\n- Unclear communication about shipped work\n- Not available for overlap with the product team",
+      "- Нет недавнего практического владения фронтендом\n- Неясно рассказывает о выпущенных проектах\n- Не готов пересекаться по времени с продуктовой командой",
     conditions:
-      "- Remote across Europe\n- Core collaboration hours: 10:00-16:00 CET\n- Full-time only",
+      "- Удалённо по Европе\n- Основные часы пересечения: 10:00-16:00 CET\n- Только full-time",
     weights: {
       experience: 30,
       skills: 25,
@@ -60,24 +60,24 @@ export const initialVacancies: Vacancy[] = [
       readiness: 10,
       communication: 5,
     },
-    status: "Active",
-    updatedAt: "Yesterday",
+    status: "Активна",
+    updatedAt: "Вчера",
   },
   {
     id: "2",
-    title: "Backend Engineer (Go)",
+    title: "Бэкенд-инженер (Go)",
     description:
-      "Experience with microservices in Go, PostgreSQL, and Kubernetes.",
+      "Опыт с микросервисами на Go, PostgreSQL и Kubernetes.",
     responsibilities:
-      "- Build internal services for hiring workflows\n- Improve API latency and failure recovery\n- Own observability for core screening pipelines",
+      "- Разрабатывать внутренние сервисы для процессов найма\n- Улучшать задержки API и восстановление после сбоев\n- Отвечать за наблюдаемость ключевых пайплайнов скрининга",
     mustHaves:
-      "- Strong Go experience in production\n- PostgreSQL query tuning\n- Experience with service ownership in Kubernetes",
+      "- Сильный продакшен-опыт с Go\n- Оптимизация запросов PostgreSQL\n- Опыт владения сервисами в Kubernetes",
     niceToHaves:
-      "- Event-driven systems\n- Messaging queues\n- Experience in B2B SaaS",
+      "- Event-driven системы\n- Очереди сообщений\n- Опыт в B2B SaaS",
     stopFactors:
-      "- Limited backend ownership depth\n- No production debugging examples\n- Cannot support on-call rotation",
+      "- Недостаточная глубина владения бэкендом\n- Нет примеров отладки в продакшене\n- Не готов к on-call дежурствам",
     conditions:
-      "- Hybrid in Warsaw or remote in Poland\n- On-call rotation once every 6 weeks\n- Full-time only",
+      "- Гибрид в Варшаве или удалённо из Польши\n- On-call дежурство раз в 6 недель\n- Только full-time",
     weights: {
       experience: 25,
       skills: 30,
@@ -87,23 +87,23 @@ export const initialVacancies: Vacancy[] = [
       readiness: 10,
       communication: 5,
     },
-    status: "Active",
-    updatedAt: "2 days ago",
+    status: "Активна",
+    updatedAt: "2 дня назад",
   },
   {
     id: "3",
-    title: "Product Designer",
-    description: "Figma expert with a strong portfolio in B2B SaaS.",
+    title: "Продуктовый дизайнер",
+    description: "Эксперт по Figma с сильным портфолио в B2B SaaS.",
     responsibilities:
-      "- Lead end-to-end flows for screening and recruiter tooling\n- Turn user research into shippable interaction patterns\n- Collaborate closely with product and engineering",
+      "- Вести end-to-end сценарии для скрининга и инструментов рекрутера\n- Превращать пользовательские исследования в готовые паттерны взаимодействия\n- Тесно сотрудничать с продуктом и разработкой",
     mustHaves:
-      "- Strong portfolio in B2B workflows\n- High proficiency in Figma\n- Experience shipping product changes with engineers",
+      "- Сильное портфолио в B2B-сценариях\n- Высокий уровень владения Figma\n- Опыт запуска продуктовых изменений вместе с инженерами",
     niceToHaves:
-      "- Design systems experience\n- Qualitative user research\n- Marketplace or hiring product background",
+      "- Опыт с дизайн-системами\n- Качественные пользовательские исследования\n- Опыт с маркетплейсами или hiring-продуктами",
     stopFactors:
-      "- Portfolio lacks workflow depth\n- No systems thinking examples\n- Unable to explain tradeoffs in decision making",
+      "- В портфолио не хватает глубины сценариев\n- Нет примеров системного мышления\n- Не может объяснить компромиссы в принятии решений",
     conditions:
-      "- Remote-friendly\n- Portfolio review required\n- Contract-to-hire possible",
+      "- Возможна удалённая работа\n- Обязателен просмотр портфолио\n- Возможен переход с контракта в штат",
     weights: {
       experience: 20,
       skills: 25,
@@ -113,8 +113,8 @@ export const initialVacancies: Vacancy[] = [
       readiness: 10,
       communication: 20,
     },
-    status: "Active",
-    updatedAt: "1 week ago",
+    status: "Активна",
+    updatedAt: "1 неделю назад",
   },
 ];
 
@@ -124,95 +124,95 @@ export const initialCandidates: Candidate[] = [
     vacancyId: "1",
     name: "Anna Petrova",
     initials: "AP",
-    role: "Senior Platform Engineer",
+    role: "Старший платформенный инженер",
     company: "Stripe",
-    experience: "6 yrs",
+    experience: "6 лет",
     matchScore: 92,
-    stage: "New",
-    addedAt: "2m ago",
+    stage: "Новые",
+    addedAt: "2 мин назад",
   },
   {
     id: "c2",
     vacancyId: "2",
     name: "Dmitry Kuznetsov",
     initials: "DK",
-    role: "Backend Engineer",
+    role: "Бэкенд-инженер",
     company: "Revolut",
-    experience: "5 yrs",
+    experience: "5 лет",
     matchScore: 88,
-    stage: "Interview",
-    addedAt: "1h ago",
+    stage: "Интервью",
+    addedAt: "1 ч назад",
   },
   {
     id: "c3",
     vacancyId: "1",
     name: "Maria Collins",
     initials: "MC",
-    role: "Staff Software Engineer",
+    role: "Ведущий инженер-программист",
     company: "Shopify",
-    experience: "7 yrs",
+    experience: "7 лет",
     matchScore: 85,
-    stage: "Screened",
-    addedAt: "2h ago",
+    stage: "Отскриненные",
+    addedAt: "2 ч назад",
   },
   {
     id: "c4",
     vacancyId: "2",
     name: "Ivan Lebedev",
     initials: "IL",
-    role: "Tech Lead",
+    role: "Техлид",
     company: "Tinkoff",
-    experience: "6 yrs",
+    experience: "6 лет",
     matchScore: 82,
-    stage: "Offer",
-    addedAt: "4h ago",
+    stage: "Оффер",
+    addedAt: "4 ч назад",
   },
   {
     id: "c5",
     vacancyId: "2",
     name: "Ethan Wong",
     initials: "EW",
-    role: "Senior Backend Engineer",
+    role: "Старший бэкенд-инженер",
     company: "Plaid",
-    experience: "5 yrs",
+    experience: "5 лет",
     matchScore: 81,
-    stage: "Screened",
-    addedAt: "5h ago",
+    stage: "Отскриненные",
+    addedAt: "5 ч назад",
   },
   {
     id: "c6",
     vacancyId: "1",
     name: "Rohan Singh",
     initials: "RS",
-    role: "Software Engineer",
+    role: "Инженер-программист",
     company: "AWS",
-    experience: "4 yrs",
+    experience: "4 года",
     matchScore: 78,
-    stage: "New",
-    addedAt: "6h ago",
+    stage: "Новые",
+    addedAt: "6 ч назад",
   },
   {
     id: "c7",
     vacancyId: "3",
     name: "Nina Brown",
     initials: "NB",
-    role: "Product Designer",
+    role: "Продуктовый дизайнер",
     company: "Databricks",
-    experience: "4 yrs",
+    experience: "4 года",
     matchScore: 75,
-    stage: "New",
-    addedAt: "7h ago",
+    stage: "Новые",
+    addedAt: "7 ч назад",
   },
   {
     id: "c8",
     vacancyId: "3",
     name: "Alex Johnson",
     initials: "AJ",
-    role: "UI/UX Designer",
+    role: "UI/UX-дизайнер",
     company: "Figma",
-    experience: "3 yrs",
+    experience: "3 года",
     matchScore: 95,
-    stage: "Interview",
-    addedAt: "1d ago",
+    stage: "Интервью",
+    addedAt: "1 д назад",
   },
 ];

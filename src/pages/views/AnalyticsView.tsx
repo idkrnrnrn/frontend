@@ -16,37 +16,37 @@ import {
 } from "lucide-react";
 
 const pipelineData = [
-  { name: "Apr 21", value: 6 },
-  { name: "Apr 23", value: 16 },
-  { name: "Apr 26", value: 15 },
-  { name: "Apr 28", value: 20 },
-  { name: "May 1", value: 22 },
-  { name: "May 3", value: 15 },
-  { name: "May 5", value: 24 },
-  { name: "May 8", value: 30 },
-  { name: "May 12", value: 35 },
-  { name: "May 14", value: 26 },
-  { name: "May 16", value: 18 },
-  { name: "May 19", value: 22 },
-  { name: "May 21", value: 25 },
-  { name: "May 23", value: 36 },
+  { name: "21 апр", value: 6 },
+  { name: "23 апр", value: 16 },
+  { name: "26 апр", value: 15 },
+  { name: "28 апр", value: 20 },
+  { name: "1 мая", value: 22 },
+  { name: "3 мая", value: 15 },
+  { name: "5 мая", value: 24 },
+  { name: "8 мая", value: 30 },
+  { name: "12 мая", value: 35 },
+  { name: "14 мая", value: 26 },
+  { name: "16 мая", value: 18 },
+  { name: "19 мая", value: 22 },
+  { name: "21 мая", value: 25 },
+  { name: "23 мая", value: 36 },
 ];
 
 const pieData = [
-  { name: "Backend Engineer", value: 28 },
-  { name: "Platform Engineer", value: 18 },
-  { name: "Frontend Engineer", value: 10 },
-  { name: "DevOps Engineer", value: 8 },
-  { name: "Others", value: 8 },
+  { name: "Бэкенд-инженер", value: 28 },
+  { name: "Платформенный инженер", value: 18 },
+  { name: "Фронтенд-инженер", value: 10 },
+  { name: "DevOps-инженер", value: 8 },
+  { name: "Другие", value: 8 },
 ];
 
 export default function AnalyticsView() {
   return (
     <div className="flex flex-col gap-6 w-full text-foreground max-w-[1200px] mx-auto pb-10">
       <div className="flex flex-col mb-4">
-        <h1 className="text-2xl font-semibold mb-1">Analytics Overview</h1>
+        <h1 className="text-2xl font-semibold mb-1">Обзор аналитики</h1>
         <p className="text-muted-foreground text-sm">
-          Here's what's happening with your hiring today.
+          Что происходит с наймом прямо сейчас.
         </p>
       </div>
 
@@ -62,13 +62,13 @@ export default function AnalyticsView() {
           </div>
           <div className="flex flex-col gap-1">
             <span className="text-sm text-muted-foreground">
-              Candidates analyzed
+              Кандидатов проанализировано
             </span>
             <div className="flex items-center gap-1 text-xs text-muted-foreground font-mono">
               <ArrowUp size={12} />
               <span className="text-foreground font-medium">12%</span>
               <span className="text-muted-foreground ml-1 font-sans">
-                vs last 7 days
+                к прошлым 7 дням
               </span>
             </div>
           </div>
@@ -84,13 +84,13 @@ export default function AnalyticsView() {
           </div>
           <div className="flex flex-col gap-1">
             <span className="text-sm text-muted-foreground">
-              Strong matches
+              Сильных совпадений
             </span>
             <div className="flex items-center gap-1 text-xs text-muted-foreground font-mono">
               <ArrowUp size={12} />
               <span className="text-foreground font-medium">8%</span>
               <span className="text-muted-foreground ml-1 font-sans">
-                vs last 7 days
+                к прошлым 7 дням
               </span>
             </div>
           </div>
@@ -105,12 +105,12 @@ export default function AnalyticsView() {
             <span className="text-2xl font-mono font-medium">23</span>
           </div>
           <div className="flex flex-col gap-1">
-            <span className="text-sm text-muted-foreground">To review</span>
+            <span className="text-sm text-muted-foreground">На проверке</span>
             <div className="flex items-center gap-1 text-xs text-muted-foreground font-mono">
               <ArrowDown size={12} />
               <span className="text-foreground font-medium">4%</span>
               <span className="text-muted-foreground ml-1 font-sans">
-                vs last 7 days
+                к прошлым 7 дням
               </span>
             </div>
           </div>
@@ -125,12 +125,12 @@ export default function AnalyticsView() {
             <span className="text-2xl font-mono font-medium">4</span>
           </div>
           <div className="flex flex-col gap-1">
-            <span className="text-sm text-muted-foreground">Interviews</span>
+            <span className="text-sm text-muted-foreground">Интервью</span>
             <div className="flex items-center gap-1 text-xs text-muted-foreground font-mono">
               <ArrowUp size={12} />
               <span className="text-foreground font-medium">2</span>
               <span className="text-muted-foreground ml-1 font-sans">
-                vs last 7 days
+                к прошлым 7 дням
               </span>
             </div>
           </div>
@@ -142,9 +142,9 @@ export default function AnalyticsView() {
         {/* Pipeline Overview */}
         <div className="bg-surface border border-border rounded-lg p-6 shadow-sm flex flex-col">
           <div className="flex justify-between items-center mb-6">
-            <h3 className="font-semibold text-lg">Pipeline overview</h3>
+            <h3 className="font-semibold text-lg">Обзор воронки</h3>
             <select className="bg-transparent text-sm text-muted-foreground border border-border rounded-md px-2 py-1 outline-none">
-              <option>This month</option>
+              <option>Этот месяц</option>
             </select>
           </div>
 
@@ -153,31 +153,31 @@ export default function AnalyticsView() {
             <div className="absolute top-[40%] left-0 right-0 h-px bg-border -z-10" />
 
             <div className="flex flex-col items-center gap-2 relative z-10">
-              <span className="text-sm text-muted-foreground">Sourced</span>
+              <span className="text-sm text-muted-foreground">Найдено</span>
               <span className="text-xl font-mono font-medium mb-4">412</span>
               <div className="w-2 h-2 rounded-full bg-foreground" />
             </div>
 
             <div className="flex flex-col items-center gap-2 relative z-10">
-              <span className="text-sm text-muted-foreground">Screened</span>
+              <span className="text-sm text-muted-foreground">Отскринено</span>
               <span className="text-xl font-mono font-medium mb-4">127</span>
               <div className="w-2 h-2 rounded-full bg-foreground" />
             </div>
 
             <div className="flex flex-col items-center gap-2 relative z-10">
-              <span className="text-sm text-muted-foreground">Shortlisted</span>
+              <span className="text-sm text-muted-foreground">В шорт-листе</span>
               <span className="text-xl font-mono font-medium mb-4">23</span>
               <div className="w-2 h-2 rounded-full bg-foreground" />
             </div>
 
             <div className="flex flex-col items-center gap-2 relative z-10">
-              <span className="text-sm text-muted-foreground">Interview</span>
+              <span className="text-sm text-muted-foreground">Интервью</span>
               <span className="text-xl font-mono font-medium mb-4">4</span>
               <div className="w-2 h-2 rounded-full bg-foreground" />
             </div>
 
             <div className="flex flex-col items-center gap-2 relative z-10">
-              <span className="text-sm text-muted-foreground">Offer</span>
+              <span className="text-sm text-muted-foreground">Оффер</span>
               <span className="text-xl font-mono font-medium mb-4">3</span>
               <div className="w-2 h-2 rounded-full bg-foreground" />
             </div>
@@ -187,25 +187,25 @@ export default function AnalyticsView() {
             <div className="flex flex-col items-center justify-center p-2 rounded-md bg-background/50 border border-border">
               <span className="text-sm font-mono font-medium">30.8%</span>
               <span className="text-[10px] text-muted-foreground">
-                conversion
+                конверсия
               </span>
             </div>
             <div className="flex flex-col items-center justify-center p-2 rounded-md bg-background/50 border border-border">
               <span className="text-sm font-mono font-medium">18.1%</span>
               <span className="text-[10px] text-muted-foreground">
-                conversion
+                конверсия
               </span>
             </div>
             <div className="flex flex-col items-center justify-center p-2 rounded-md bg-background/50 border border-border">
               <span className="text-sm font-mono font-medium">17.4%</span>
               <span className="text-[10px] text-muted-foreground">
-                conversion
+                конверсия
               </span>
             </div>
             <div className="flex flex-col items-center justify-center p-2 rounded-md bg-background/50 border border-border">
               <span className="text-sm font-mono font-medium">75%</span>
               <span className="text-[10px] text-muted-foreground">
-                conversion
+                конверсия
               </span>
             </div>
           </div>
@@ -214,9 +214,9 @@ export default function AnalyticsView() {
         {/* Matches over time */}
         <div className="bg-surface border border-border rounded-lg p-6 shadow-sm flex flex-col">
           <div className="flex justify-between items-center mb-6">
-            <h3 className="font-semibold text-lg">Matches over time</h3>
+            <h3 className="font-semibold text-lg">Совпадения по времени</h3>
             <select className="bg-transparent text-sm text-muted-foreground border border-border rounded-md px-2 py-1 outline-none">
-              <option>Last 30 days</option>
+              <option>Последние 30 дней</option>
             </select>
           </div>
 
@@ -263,14 +263,14 @@ export default function AnalyticsView() {
             <div className="flex items-baseline gap-2">
               <span className="text-2xl font-mono font-medium">72</span>
               <span className="text-sm text-muted-foreground">
-                Total matches
+                Всего совпадений
               </span>
             </div>
             <div className="flex items-center gap-1 text-sm text-muted-foreground font-mono">
               <ArrowUp size={14} />
               <span className="text-foreground font-medium">16%</span>
               <span className="text-muted-foreground ml-1 font-sans">
-                vs previous 30 days
+                к предыдущим 30 дням
               </span>
             </div>
           </div>
@@ -281,7 +281,7 @@ export default function AnalyticsView() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Top roles */}
         <div className="bg-surface border border-border rounded-lg p-6 shadow-sm flex flex-col gap-6">
-          <h3 className="font-semibold text-lg">Top roles by matches</h3>
+          <h3 className="font-semibold text-lg">Топ ролей по совпадениям</h3>
           <div className="flex flex-col gap-4 w-full mt-2">
             {pieData.map((item, i) => (
               <div
@@ -308,14 +308,14 @@ export default function AnalyticsView() {
         {/* Key Signals */}
         <div className="bg-surface border border-border rounded-lg p-6 shadow-sm flex flex-col md:flex-row gap-6">
           <div className="flex-1 flex flex-col">
-            <h3 className="font-semibold text-lg mb-6">Key signals</h3>
+            <h3 className="font-semibold text-lg mb-6">Ключевые сигналы</h3>
             <div className="flex flex-col gap-4">
               {[
-                { name: "System Design", val: 80 },
-                { name: "Backend Development", val: 75 },
-                { name: "Leadership", val: 85 },
-                { name: "Execution Velocity", val: 65 },
-                { name: "Product Thinking", val: 60 },
+                { name: "Системный дизайн", val: 80 },
+                { name: "Бэкенд-разработка", val: 75 },
+                { name: "Лидерство", val: 85 },
+                { name: "Скорость исполнения", val: 65 },
+                { name: "Продуктовое мышление", val: 60 },
               ].map((sig, i) => (
                 <div
                   key={i}
@@ -336,13 +336,13 @@ export default function AnalyticsView() {
           <div className="w-full md:w-[220px] bg-muted/50 border border-border rounded-lg p-4 flex flex-col justify-center">
             <div className="flex items-center gap-2 text-foreground mb-3 font-semibold">
               <Sparkles size={16} />
-              <span className="text-sm">Insights</span>
+              <span className="text-sm">Инсайты</span>
             </div>
             <p className="text-sm text-foreground mb-2">
-              Your pipeline is healthy.
+              Воронка выглядит здоровой.
             </p>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Interview conversion improved by 8% compared to last month.
+              Конверсия в этап интервью выросла на 8% по сравнению с прошлым месяцем.
             </p>
           </div>
         </div>

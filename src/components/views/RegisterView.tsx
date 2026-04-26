@@ -31,7 +31,7 @@ export default function RegisterView({
                 С возвращением
               </h2>
               <p className="text-sm text-muted-foreground">
-                Войдите в рабочее пространство Screenr.
+                Войдите в рабочее пространство HRush.
               </p>
             </div>
 
@@ -41,7 +41,7 @@ export default function RegisterView({
                 <Input
                   id="login-email"
                   type="email"
-                  placeholder="name@company.com"
+                  placeholder="name@company.ru"
                 />
               </div>
             </div>
@@ -57,18 +57,18 @@ export default function RegisterView({
                 Начать работу
               </h2>
               <p className="text-sm text-muted-foreground">
-                Создайте рабочее пространство Screenr для вашей команды.
+                Создайте рабочее пространство HRush для вашей команды.
               </p>
             </div>
 
             <div className="flex flex-col gap-4 mt-2">
               <div className="space-y-2">
                 <Label htmlFor="company">Название компании</Label>
-                <Input id="company" placeholder="Acme Inc." />
+                <Input id="company" placeholder="ООО Ромашка" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Рабочий email</Label>
-                <Input id="email" type="email" placeholder="name@company.com" />
+                <Input id="email" type="email" placeholder="name@company.ru" />
               </div>
             </div>
 

@@ -18,7 +18,7 @@ export default function LandingView() {
       </h1>
 
       <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-2xl font-light mb-14">
-        Screenr превращает хаотичные потоки резюме в структурированный граф
+        HRush превращает хаотичные потоки резюме в структурированный граф
         компетенций. Мы находим скрытые сигналы и сопоставляем реальный опыт
         кандидатов с вашими техническими требованиями, исключая человеческий
         фактор.

@@ -336,7 +336,7 @@ function VacanciesView({
                 <Briefcase size={18} />
               </div>
               <span className="text-[10px] font-medium uppercase tracking-wider px-2 py-1 border border-border bg-surface text-foreground rounded-md shadow-sm">
-                {vac.status === "Active" ? "Active" : "Closed"}
+                {vac.status}
               </span>
             </div>
             <h3 className="font-semibold text-lg text-foreground transition-colors">
@@ -348,7 +348,7 @@ function VacanciesView({
             <div className="mt-4 pt-4 border-t border-border flex flex-col gap-3">
               <div className="flex justify-between items-center text-sm text-muted-foreground">
                 <span>{vac.id}</span>
-                <span>Updated {vac.updatedAt}</span>
+                <span>Обновлено {vac.updatedAt}</span>
               </div>
               <div className="flex flex-wrap gap-2">
                 <button
@@ -360,7 +360,7 @@ function VacanciesView({
                   className="inline-flex items-center gap-2 rounded-full bg-accent px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-accent/90"
                 >
                   <MessageSquareText size={14} />
-                  Open chat
+                  Открыть чат
                 </button>
                 <button
                   type="button"
@@ -371,7 +371,7 @@ function VacanciesView({
                   className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-3 py-2 text-xs font-medium text-foreground transition-colors hover:bg-muted"
                 >
                   <Copy size={14} />
-                  {copiedVacancyId === vac.id ? "Link copied" : "Copy link"}
+                  {copiedVacancyId === vac.id ? "Ссылка скопирована" : "Копировать ссылку"}
                 </button>
               </div>
             </div>
@@ -413,7 +413,7 @@ function VacancyCandidatesWrapper({
   const [copied, setCopied] = useState(false);
 
   const vacancy = vacancies.find((v) => v.id === id);
-  const title = vacancy ? vacancy.title : "Vacancy";
+  const title = vacancy ? vacancy.title : "Вакансия";
 
   const handleCopyChatLink = async () => {
     if (!id) return;
@@ -445,18 +445,18 @@ function VacancyCandidatesWrapper({
         className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6 w-fit"
       >
         <ArrowLeft size={16} />
-        Back to Vacancies
+        Назад к вакансиям
       </button>
       <div className="mb-6 flex flex-col gap-3 rounded-3xl border border-border bg-surface/40 p-4 md:flex-row md:items-center md:justify-between md:p-5">
         <div className="min-w-0">
           <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
-            Additive workflow
+            Дополнительный сценарий
           </div>
           <h2 className="mt-2 text-xl font-semibold text-foreground">
-            Candidate pipeline plus guided screening chat
+            Воронка кандидатов и управляемый чат-скрининг
           </h2>
           <p className="mt-1 max-w-2xl text-sm leading-6 text-muted-foreground">
-            Keep the structured vacancy review here, or open the mobile-first chat flow when you want the candidate-facing screening experience.
+            Оставьте здесь структурированный обзор вакансии или откройте мобильный чат, если нужен сценарий скрининга для кандидата.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -466,7 +466,7 @@ function VacancyCandidatesWrapper({
             className="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-accent/90"
           >
             <MessageSquareText size={15} />
-            Open screening chat
+            Открыть чат-скрининг
           </button>
           <button
             type="button"
@@ -474,7 +474,7 @@ function VacancyCandidatesWrapper({
             className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
           >
             <Copy size={15} />
-            {copied ? "Link copied" : "Copy chat link"}
+            {copied ? "Ссылка скопирована" : "Копировать ссылку на чат"}
           </button>
         </div>
       </div>
@@ -508,10 +508,10 @@ function VacancyChatWrapper({
         className="rounded-3xl border border-border bg-surface/50 p-8"
       >
         <h2 className="text-xl font-semibold text-foreground">
-          Vacancy not found
+          Вакансия не найдена
         </h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          This chat flow needs a valid vacancy before it can start.
+          Для запуска этого сценария чата нужна существующая вакансия.
         </p>
       </motion.div>
     );
@@ -550,19 +550,19 @@ export default function Dashboard() {
       ...vacancies,
       {
         id,
-        title: data.title || "New Custom Vacancy",
+        title: data.title || "Новая вакансия",
         description:
-          data.description || "Auto-generated vacancy description for MVP.",
-        status: "Active",
-        updatedAt: "Just now",
+          data.description || "Автоматически созданное описание вакансии для MVP.",
+        status: "Активна",
+        updatedAt: "только что",
       },
     ]);
   };
 
   const navItems = [
     { name: "Вакансии", path: "/dashboard", icon: Briefcase },
-    { name: "Candidates", path: "/dashboard/resumes", icon: Users },
-    { name: "Analytics", path: "/dashboard/analytics", icon: BarChart },
+    { name: "Кандидаты", path: "/dashboard/resumes", icon: Users },
+    { name: "Аналитика", path: "/dashboard/analytics", icon: BarChart },
   ];
 
   const routes = (
@@ -629,7 +629,7 @@ export default function Dashboard() {
           <div className="w-8 h-8 rounded-md bg-accent flex items-center justify-center text-white">
             <div className="w-3 h-3 rounded-sm bg-white" />
           </div>
-          <span className="font-semibold text-xl tracking-tight">Screenr</span>
+          <span className="font-semibold text-xl tracking-tight">HRush</span>
         </div>
 
         <nav className="flex-1 px-4 flex flex-col gap-1 overflow-y-auto">
